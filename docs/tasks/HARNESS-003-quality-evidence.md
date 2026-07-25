@@ -48,7 +48,16 @@ Engineering-guidance change only. Production and test behaviour are unchanged.
 - Production build — pass without warnings.
 - Playwright — 11/11 pass.
 
-## Current verdict
+## Delivery closure
 
-`In review`. Local evidence is green; mandatory pull-request CI and merge are
-still required before `Done`.
+- Dedicated pull request:
+  [#7](https://github.com/irandark/norvi-storefront/pull/7)
+- Mandatory `quality-gate`: success.
+- Merge method: squash.
+- Merged at: `2026-07-25T23:06:36Z`.
+- Merge commit:
+  `0fa1f4a769a803d9bcc05d8fab8104fe1ac66bc5`.
+
+## Final verdict
+
+`Complete / Done`. All documented requirements and delivery gates pass.

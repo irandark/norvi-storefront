@@ -2,8 +2,10 @@
 
 ## Status
 
-In review — the agent, architecture, and role-contract sources are synchronized
-and the complete local quality gate passes. Mandatory CI and merge remain.
+Done — the agent, architecture, and role-contract sources are synchronized.
+Dedicated [pull request #7](https://github.com/irandark/norvi-storefront/pull/7)
+passed mandatory CI and was squash-merged into `main` as
+`0fa1f4a769a803d9bcc05d8fab8104fe1ac66bc5`.
 
 ## Priority
 
