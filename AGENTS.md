@@ -34,6 +34,20 @@ development. Deliver product changes as narrow, testable vertical slices.
 9. The orchestrator runs `npm run verify`, performs required visual comparison,
    and closes only when the exit gate in `docs/agents/orchestrator.md` passes.
 
+## Live status discipline
+
+- Treat `docs/BACKLOG.md` as live operational state, not an end-of-task report.
+- Update a task's backlog row and detailed specification immediately whenever
+  it enters `Ready`, `In progress`, `In review`, `Blocked`, or `Done`.
+- Record the status transition in the same commit or pull request change that
+  establishes it. Do not postpone status cleanup until handoff or closure.
+- Before every handoff and before reporting progress to the human, verify that
+  backlog, task specification, quality evidence, branch/PR state, and actual
+  work stage agree.
+- If work resumes after a finding or blocker, update the status before the next
+  specialist begins. A stale status is a process defect and must be corrected
+  immediately.
+
 ## Required commands
 
 - `npm run lint` — static analysis
@@ -77,6 +91,8 @@ development. Deliver product changes as narrow, testable vertical slices.
 - Do not add a dependency when the platform already provides a clear solution.
 - Update the relevant source-of-truth document when behaviour or architecture changes.
 - Keep `docs/BACKLOG.md` and the detailed task status synchronized.
+- Keep task statuses continuously current throughout delivery; updating them
+  only at the end is prohibited.
 - Do not implement or materially restyle user-facing UI without an approved
   design record.
 - A designer agent must not approve its own work. Only explicit human approval

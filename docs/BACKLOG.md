@@ -26,6 +26,7 @@ Backlog → Ready → In progress → In review → Done
 | ---------- | --------- | ------------------------------------------------------------------------- | -------- | ------- | ------------------------ | --------------------------------------------------- |
 | TD-003     | Tech debt | Introduce reusable design tokens for all shared style values              | P1       | Done    | SHOP-002                 | `docs/tasks/TD-003-reusable-design-tokens.md`       |
 | TD-004     | Tech debt | Enforce architecture boundaries with a tested static import guard          | P2       | Done    | TD-001                   | `docs/tasks/TD-004-architecture-import-guard.md`    |
+| HARNESS-002 | Task     | Keep backlog and task statuses continuously synchronized                   | P2       | Done    | HARNESS-001                | `docs/tasks/HARNESS-002-live-backlog-status.md`     |
 | SHOP-003   | Story     | Implement the approved storefront layout and backend-owned product groups | P1       | Backlog | SHOP-002, TD-001, TD-003 | To create before implementation                     |
 | DESIGN-003 | Design    | Design loading, error, empty, focus, selected, and refetch states         | P1       | Backlog | SHOP-002                 | To create before presentation work                  |
 | DEVOPS-001 | DevOps    | Publish the frontend to GitHub and add Actions quality gates              | P2       | Done    | HARNESS-001              | `docs/tasks/DEVOPS-001-github-repository-and-ci.md` |
@@ -60,3 +61,12 @@ Backlog → Ready → In progress → In review → Done
    documents; this board links to them instead of duplicating them.
 8. If Jira or another tracker is connected later, external issue keys are added
    without changing these stable repository keys.
+9. This board is live operational state. Update a task row immediately when the
+   actual work stage changes; never wait until the end of a turn, handoff, or PR.
+10. Apply every status transition to this board and the detailed task
+    specification in the same commit or pull-request update that establishes
+    the transition.
+11. Before each specialist handoff and human progress report, reconcile the
+    board, task specification, quality evidence, branch/PR state, and actual
+    delivery stage. Stale status is a process defect and is corrected before
+    further work.
