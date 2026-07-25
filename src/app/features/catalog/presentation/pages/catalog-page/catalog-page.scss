@@ -1,0 +1,161 @@
+:host {
+  display: block;
+}
+
+.catalog {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 6rem;
+}
+
+.catalog__header {
+  max-width: 43rem;
+  margin-bottom: 3rem;
+
+  h1 {
+    margin: 0;
+    color: #15251d;
+    font-size: clamp(3rem, 8vw, 6rem);
+    letter-spacing: -0.06em;
+    line-height: 0.95;
+  }
+
+  > p:last-child {
+    color: #527060;
+    font-size: 1.1rem;
+    line-height: 1.65;
+  }
+}
+
+.catalog__eyebrow {
+  margin: 0 0 1rem;
+  color: #397552;
+  font-size: 0.75rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 1.25rem;
+}
+
+.product-card {
+  overflow: hidden;
+  border: 1px solid #dce5dd;
+  border-radius: 1.25rem;
+  background: #fff;
+}
+
+.product-card__image {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #e9eee8;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.product-card__body {
+  padding: 1.25rem;
+
+  > p {
+    min-height: 3rem;
+    color: #617267;
+    line-height: 1.5;
+  }
+}
+
+.product-card__heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+
+  h2 {
+    margin: 0;
+    color: #15251d;
+    font-size: 1.1rem;
+  }
+
+  strong {
+    white-space: nowrap;
+    color: #315d46;
+  }
+}
+
+.stock {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: #397552;
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+.stock--empty {
+  color: #9a4b3d;
+}
+
+.state-card {
+  display: grid;
+  min-height: 16rem;
+  place-items: center;
+  align-content: center;
+  padding: 2rem;
+  border: 1px solid #dce5dd;
+  border-radius: 1.25rem;
+  background: #fff;
+  text-align: center;
+
+  h2,
+  p {
+    margin: 0.35rem;
+  }
+
+  button {
+    margin-top: 1.25rem;
+    padding: 0.75rem 1rem;
+    border: 0;
+    border-radius: 999px;
+    background: #315d46;
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+
+    &:focus-visible {
+      outline: 3px solid #93b9a0;
+      outline-offset: 3px;
+    }
+  }
+}
+
+.state-card--error {
+  border-color: #e3c0b8;
+}
+
+.loader {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid #dce5dd;
+  border-top-color: #397552;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader {
+    animation: none;
+  }
+}

@@ -1,0 +1,52 @@
+<section class="catalog" aria-labelledby="catalog-title">
+  <header class="catalog__header">
+    <p class="catalog__eyebrow">Осознанные вещи для дома и города</p>
+    <h1 id="catalog-title">Каталог</h1>
+    <p>Небольшая коллекция предметов, которыми приятно пользоваться каждый день.</p>
+  </header>
+
+  @switch (catalog.state().status) {
+    @case ('loading') {
+      <div class="state-card" role="status" aria-live="polite">
+        <span class="loader" aria-hidden="true"></span>
+        <p>Загружаем товары…</p>
+      </div>
+    }
+    @case ('error') {
+      <div class="state-card state-card--error" role="alert">
+        <h2>Не удалось загрузить товары</h2>
+        <p>Проверьте соединение и попробуйте ещё раз.</p>
+        <button type="button" (click)="catalog.reload()">Попробовать снова</button>
+      </div>
+    }
+    @case ('empty') {
+      <div class="state-card" data-testid="catalog-empty">
+        <h2>Каталог пока пуст</h2>
+        <p>Новые товары скоро появятся.</p>
+      </div>
+    }
+    @case ('loaded') {
+      <div class="product-grid">
+        @for (product of catalog.products(); track product.id) {
+          <article class="product-card" data-testid="product-card">
+            <div class="product-card__image">
+              <img [src]="product.imageUrl" [alt]="product.name" width="640" height="480" />
+            </div>
+            <div class="product-card__body">
+              <div class="product-card__heading">
+                <h2>{{ product.name }}</h2>
+                <strong>{{ formatPrice(product.priceInCents) }}</strong>
+              </div>
+              <p>{{ product.description }}</p>
+              @if (product.stock === 0) {
+                <span class="stock stock--empty">Нет в наличии</span>
+              } @else {
+                <span class="stock">В наличии · {{ product.stock }} шт.</span>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+  }
+</section>
