@@ -25,6 +25,7 @@ Backlog → Ready → In progress → In review → Done
 | Key        | Type      | Summary                                                                   | Priority | Status  | Depends on               | Specification                                       |
 | ---------- | --------- | ------------------------------------------------------------------------- | -------- | ------- | ------------------------ | --------------------------------------------------- |
 | TD-003     | Tech debt | Introduce reusable design tokens for all shared style values              | P1       | Done    | SHOP-002                 | `docs/tasks/TD-003-reusable-design-tokens.md`       |
+| TD-004     | Tech debt | Enforce architecture boundaries with a tested static import guard          | P2       | In progress | TD-001                 | `docs/tasks/TD-004-architecture-import-guard.md`    |
 | SHOP-003   | Story     | Implement the approved storefront layout and backend-owned product groups | P1       | Backlog | SHOP-002, TD-001, TD-003 | To create before implementation                     |
 | DESIGN-003 | Design    | Design loading, error, empty, focus, selected, and refetch states         | P1       | Backlog | SHOP-002                 | To create before presentation work                  |
 | DEVOPS-001 | DevOps    | Publish the frontend to GitHub and add Actions quality gates              | P2       | Done    | HARNESS-001              | `docs/tasks/DEVOPS-001-github-repository-and-ci.md` |
