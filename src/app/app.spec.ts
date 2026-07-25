@@ -22,7 +22,6 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.brand')?.textContent).toContain('Northstar Market');
     expect(compiled.querySelector('router-outlet')).toBeTruthy();
   });
 

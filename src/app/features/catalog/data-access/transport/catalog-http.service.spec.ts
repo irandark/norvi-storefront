@@ -3,29 +3,43 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { CatalogHttpService } from './catalog-http.service';
 
-it('loads validated DTOs from the catalog endpoint', () => {
-  TestBed.configureTestingModule({
-    providers: [CatalogHttpService, provideHttpClient(), provideHttpClientTesting()],
+describe('CatalogHttpService', () => {
+  let service: CatalogHttpService;
+  let http: HttpTestingController;
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [CatalogHttpService, provideHttpClient(), provideHttpClientTesting()],
+    });
+    service = TestBed.inject(CatalogHttpService);
+    http = TestBed.inject(HttpTestingController);
   });
-  const service = TestBed.inject(CatalogHttpService);
-  const http = TestBed.inject(HttpTestingController);
-  const response = [
-    {
-      id: 'tote',
-      name: 'Сумка',
-      description: 'Льняная',
-      priceInCents: 10000,
-      imageUrl: '/image.svg',
-      stock: 2,
-    },
-  ];
-  let actual: unknown;
+  afterEach(() => http.verify());
 
-  service.getProducts().subscribe((dtos) => (actual = dtos));
-  const request = http.expectOne('/data/products.json');
-  expect(request.request.method).toBe('GET');
-  request.flush(response);
+  it('loads validated groups from the exact endpoint', () => {
+    const response = [{ id: 'home', slug: 'dlya-doma', name: 'Для дома' }];
+    let actual: unknown;
+    service.getGroups().subscribe((value) => (actual = value));
+    const request = http.expectOne('/api/product-groups');
+    expect(request.request.method).toBe('GET');
+    request.flush(response);
+    expect(actual).toEqual(response);
+  });
 
-  expect(actual).toEqual(response);
-  http.verify();
+  it('loads all products without a query', () => {
+    service.getProducts().subscribe();
+    expect(http.expectOne('/api/products').request.params.keys()).toEqual([]);
+  });
+
+  it('serializes a group id as an HTTP query parameter', () => {
+    service.getProducts('kitchen & home').subscribe();
+    const request = http.expectOne('/api/products?groupId=kitchen%20%26%20home');
+    expect(request.request.method).toBe('GET');
+  });
+
+  it('propagates validation failures from the product boundary', () => {
+    let error: unknown;
+    service.getProducts().subscribe({ error: (value) => (error = value) });
+    http.expectOne('/api/products').flush({});
+    expect(error).toBeInstanceOf(Error);
+  });
 });
