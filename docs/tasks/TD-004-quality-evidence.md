@@ -99,5 +99,11 @@
   functions 100% (22/22), and lines 100% (46/46).
 - Visual comparison when applicable: Not applicable; UI is unchanged.
 - Open accepted risks: none.
-- Orchestrator final status: In progress pending dedicated pull request,
-  mandatory CI, and merge.
+- Dedicated branch: `chore/td-004-architecture-guard`.
+- Pull request: `https://github.com/irandark/norvi-storefront/pull/3`.
+- Mandatory CI: `quality-gate` passed in 1m 16s before final status
+  synchronization; the final documentation-only commit must pass the same gate
+  before merge.
+- Orchestrator final status: Complete pending the protected merge operation;
+  backlog and task status are synchronized to the merge outcome in this final
+  commit.
