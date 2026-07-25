@@ -1,18 +1,21 @@
 :root {
   /* Primitive palette */
   --color-white: #fff;
-  --color-green-950: #15251d;
-  --color-green-800: #315d46;
-  --color-green-700: #397552;
-  --color-green-500: #527060;
-  --color-green-400: #617267;
-  --color-green-300: #93b9a0;
-  --color-green-200: #bed3c6;
-  --color-green-100: #dce5dd;
-  --color-green-75: #e9eee8;
-  --color-green-50: #f5f7f2;
-  --color-red-700: #9a4b3d;
-  --color-red-200: #e3c0b8;
+  --color-green-950: #172036;
+  --color-green-800: #5147e5;
+  --color-green-700: #5147e5;
+  --color-green-500: #69738c;
+  --color-green-400: #7d879e;
+  --color-green-300: #5147e5;
+  --color-green-200: #ccd2df;
+  --color-green-100: #dde2ec;
+  --color-green-75: #eef1f6;
+  --color-green-50: #f6f8fc;
+  --color-red-700: #8f2f3d;
+  --color-red-200: #e7bcc4;
+  --color-overlay-light: rgb(23 32 54 / 18%);
+  --color-overlay-strong: rgb(23 32 54 / 48%);
+  --color-shadow: rgb(23 32 54 / 16%);
 
   /* Primitive spacing scale */
   --space-2xs: 0.5rem;
@@ -57,12 +60,15 @@
   --border-status: var(--color-green-200);
   --border-danger: var(--color-red-200);
   --focus-ring-color: var(--color-green-300);
+  --surface-overlay-light: var(--color-overlay-light);
+  --surface-overlay-strong: var(--color-overlay-strong);
+  --shadow-panel: 0 1.25rem 3rem var(--color-shadow);
 
   /* Application shell semantics */
   --font-family-sans:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --viewport-block-full: 100dvh;
-  --content-max-width: 72rem;
+  --content-max-width: 82.5rem;
   --page-inline-padding: var(--space-lg);
   --header-block-size: 5.5rem;
   --brand-font-size: var(--font-size-xl);

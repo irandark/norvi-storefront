@@ -2,20 +2,27 @@
 
 ## Responsibility
 
-Owns Angular bootstrap configuration, top-level routes, and the root shell. It
-does not own catalog business behaviour or HTTP contracts.
+Owns Angular bootstrap configuration, top-level routes, and root dependency
+wiring. The approved storefront shell is rendered by the catalog route because
+its navigation and URL selection form one feature workflow. The application
+shell does not own catalog business behaviour or DTO contracts.
 
 ## Public surface
 
 - `/` route, currently backed by the catalog page.
 - Root providers in `app.config.ts`.
+- HTTP client and catalog port/repository provider registration. The
+  development harness serves the temporary local API outside Angular.
 
 ## Data and control flow
 
 `app.routes.ts` dynamically selects a feature presentation entry point.
 `app.config.ts` is the narrow composition root that connects domain ports and
-services to data-access adapters. Other shell files must not import feature
-internals.
+services to data-access adapters. The `scripts/dev-server.mjs` boundary serves
+deterministic `/api/*` responses and proxies other development traffic to
+Angular, so browser tooling can observe and override every API request. Router
+query adaptation stays in the catalog page; business selection stays in
+`CatalogService`. Other shell files must not import feature internals.
 
 ## Invariants
 

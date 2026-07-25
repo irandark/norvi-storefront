@@ -3,7 +3,7 @@ import { of } from 'rxjs';
 import { CatalogHttpService } from '../transport/catalog-http.service';
 import { HttpProductCatalogRepository } from './http-product-catalog.repository';
 
-it('returns domain products mapped from transport DTOs', () => {
+it('returns domain products and groups mapped from transport DTOs', () => {
   const dto = {
     id: 'tote',
     name: 'Сумка',
@@ -15,7 +15,13 @@ it('returns domain products mapped from transport DTOs', () => {
   TestBed.configureTestingModule({
     providers: [
       HttpProductCatalogRepository,
-      { provide: CatalogHttpService, useValue: { getProducts: () => of([dto]) } },
+      {
+        provide: CatalogHttpService,
+        useValue: {
+          getProducts: () => of([dto]),
+          getGroups: () => of([{ id: 'home', slug: 'home', name: 'Дом' }]),
+        },
+      },
     ],
   });
   let actual: unknown;
@@ -26,4 +32,8 @@ it('returns domain products mapped from transport DTOs', () => {
 
   expect(actual).toEqual([dto]);
   expect((actual as object[])[0]).not.toBe(dto);
+
+  let groups: unknown;
+  TestBed.inject(HttpProductCatalogRepository).getGroups().subscribe((value) => (groups = value));
+  expect(groups).toEqual([{ id: 'home', slug: 'home', name: 'Дом' }]);
 });
