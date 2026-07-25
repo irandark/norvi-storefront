@@ -16,12 +16,13 @@ shell does not own catalog business behaviour or DTO contracts.
 
 ## Data and control flow
 
-`app.routes.ts` selects the catalog presentation entry point. Root providers
-connect the catalog domain port to its HTTP repository. The
-`scripts/dev-server.mjs` boundary serves deterministic `/api/*` responses and
-proxies other development traffic to Angular, so browser tooling can observe
-and override every API request. Router query adaptation stays in the catalog
-page; business selection stays in `CatalogService`.
+`app.routes.ts` dynamically selects a feature presentation entry point.
+`app.config.ts` is the narrow composition root that connects domain ports and
+services to data-access adapters. The `scripts/dev-server.mjs` boundary serves
+deterministic `/api/*` responses and proxies other development traffic to
+Angular, so browser tooling can observe and override every API request. Router
+query adaptation stays in the catalog page; business selection stays in
+`CatalogService`. Other shell files must not import feature internals.
 
 ## Invariants
 
@@ -45,8 +46,8 @@ page; business selection stays in `CatalogService`.
 
 ## Verification
 
-Run `npm run lint` (including `lint:styles`), `npm run test`, `npm run build`,
-and `npm run e2e`.
+Run `npm run lint` (including `lint:styles` and `lint:architecture`),
+`npm run test`, `npm run build`, and `npm run e2e`.
 
 GitHub CI uses `.github/workflows/quality-gate.yml` with Node.js 24.14.0 and npm
 11.11.0. The stable required check is `quality-gate`.
@@ -54,6 +55,10 @@ GitHub CI uses `.github/workflows/quality-gate.yml` with Node.js 24.14.0 and npm
 ## Decisions and traps
 
 See `ARCHITECTURE.md`, `docs/product/storefront.md`, and `docs/BACKLOG.md`.
+
+Cross-feature consumers use only the target feature's exact `domain/index.ts`.
+The architecture guard resolves relative paths and configured aliases and
+checks production plus colocated test files.
 
 Angular CLI persistent caching is disabled in `angular.json`. On the current
 macOS arm64 environment the native LMDB cache addon aborts while freeing an

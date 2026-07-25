@@ -115,9 +115,18 @@ domain       ⇢ HttpClient
 
 Cross-feature access goes through an explicitly exported domain API. A feature
 must not import another feature's presentation or data-access internals.
+The only cross-feature compile-time entry point is the target feature's exact
+`domain/index.ts`; importing deeper domain files bypasses that public API and is
+forbidden.
 
 Application-wide infrastructure belongs in `core`. Reusable presentational UI
 without business ownership belongs in `shared`.
+
+The application composition root is deliberately narrow: `app.config.ts` may
+import domain ports/services and data-access implementations to wire dependency
+injection, while `app.routes.ts` may dynamically import feature presentation
+entry points for route loading. Other application files must not import feature
+internals.
 
 ## State ownership
 
@@ -141,13 +150,21 @@ without business ownership belongs in `shared`.
 
 ## Mechanical enforcement
 
-Documentation is not sufficient protection. Add static architecture checks when
-the first migration is implemented:
+`npm run lint:architecture` uses the TypeScript compiler API and root TypeScript
+configuration to inspect production and colocated test sources. It resolves
+relative imports and configured aliases, and checks static imports, type-only
+imports/re-exports, and dynamic imports. Diagnostics are stable and include the
+project-relative source path, line, and violated rule.
 
 - presentation cannot import from `data-access`;
-- domain cannot import from `data-access`, Angular HTTP, or DTO paths;
-- component files cannot import `HttpClient`;
-- DTO types cannot appear in presentation files.
+- presentation cannot import Angular HTTP APIs;
+- domain cannot import from `data-access`, Angular HTTP, presentation, or
+  browser storage globals;
+- one feature can consume another only through the exact `domain/index.ts`;
+- the composition-root exceptions above are enforced by file and import kind.
 
-New features must follow these rules immediately. Existing violations are tracked
-as explicit technical-debt tasks and must not be copied into new code.
+Enforcement follows resolved ownership rather than filename suffixes: comments,
+ordinary strings, unresolved imports, and domain types with DTO-like names do
+not produce architecture findings. Locally shadowed storage names are not
+treated as browser globals. TypeScript and ESLint remain responsible for
+unresolved-module diagnostics.

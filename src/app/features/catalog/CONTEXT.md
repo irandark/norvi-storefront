@@ -75,6 +75,9 @@ Run `npm run test`, `npm run lint`, `npm run build`, and `npm run e2e`.
 Catalog presentation styles consume global semantic tokens documented in
 `src/styles/CONTEXT.md`. `npm run lint:styles` rejects raw colours outside the
 global palette and dimensions outside owned token-definition files.
+`npm run lint:architecture` resolves TypeScript dependencies and enforces the
+presentation, domain, data-access, and exact cross-feature `domain/index.ts`
+boundaries for production and colocated test sources.
 
 ## Decisions and traps
 
