@@ -1,0 +1,50 @@
+[
+  {
+    "id": "linen-tote",
+    "name": "Льняная сумка",
+    "description": "Прочная повседневная сумка из плотного натурального льна.",
+    "priceInCents": 349000,
+    "imageUrl": "/images/product-placeholder.svg",
+    "stock": 8
+  },
+  {
+    "id": "ceramic-cup",
+    "name": "Керамическая чашка",
+    "description": "Чашка ручной работы с мягкой матовой глазурью.",
+    "priceInCents": 219000,
+    "imageUrl": "/images/product-placeholder.svg",
+    "stock": 12
+  },
+  {
+    "id": "wool-blanket",
+    "name": "Шерстяной плед",
+    "description": "Тёплый плед спокойного оттенка для прохладных вечеров.",
+    "priceInCents": 789000,
+    "imageUrl": "/images/product-placeholder.svg",
+    "stock": 3
+  },
+  {
+    "id": "desk-lamp",
+    "name": "Настольная лампа",
+    "description": "Лаконичный направленный свет для рабочего стола.",
+    "priceInCents": 649000,
+    "imageUrl": "/images/product-placeholder.svg",
+    "stock": 0
+  },
+  {
+    "id": "oak-tray",
+    "name": "Дубовый поднос",
+    "description": "Небольшой поднос из массива дуба с натуральным маслом.",
+    "priceInCents": 429000,
+    "imageUrl": "/images/product-placeholder.svg",
+    "stock": 5
+  },
+  {
+    "id": "linen-notebook",
+    "name": "Льняной блокнот",
+    "description": "Блокнот в тканевой обложке с плотной кремовой бумагой.",
+    "priceInCents": 179000,
+    "imageUrl": "/images/product-placeholder.svg",
+    "stock": 16
+  }
+]

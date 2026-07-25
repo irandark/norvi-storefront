@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.brand {
+  color: #15251d;
+  font-size: 1.125rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.baseline-status {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid #bed3c6;
+  border-radius: 999px;
+  color: #315d46;
+  font-size: 0.8rem;
+}
+
+main {
+  min-height: calc(100dvh - 5.5rem);
+}
