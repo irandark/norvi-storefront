@@ -1,0 +1,79 @@
+:root {
+  /* Primitive palette */
+  --color-white: #fff;
+  --color-green-950: #15251d;
+  --color-green-800: #315d46;
+  --color-green-700: #397552;
+  --color-green-500: #527060;
+  --color-green-400: #617267;
+  --color-green-300: #93b9a0;
+  --color-green-200: #bed3c6;
+  --color-green-100: #dce5dd;
+  --color-green-75: #e9eee8;
+  --color-green-50: #f5f7f2;
+  --color-red-700: #9a4b3d;
+  --color-red-200: #e3c0b8;
+
+  /* Primitive spacing scale */
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.25rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+
+  /* Primitive typography scale */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.8rem;
+  --font-size-md: 0.85rem;
+  --font-size-lg: 1.1rem;
+  --font-size-xl: 1.125rem;
+  --font-weight-medium: 650;
+  --font-weight-bold: 700;
+  --font-weight-strong: 750;
+
+  /* Primitive shape and border scale */
+  --border-width-thin: 1px;
+  --border-width-strong: 3px;
+  --radius-card: 1.25rem;
+  --radius-pill: 999px;
+
+  /* Application semantic colours */
+  --surface-page: var(--color-green-50);
+  --surface-card: var(--color-white);
+  --surface-media: var(--color-green-75);
+  --surface-action: var(--color-green-800);
+  --text-primary: var(--color-green-950);
+  --text-secondary: var(--color-green-500);
+  --text-muted: var(--color-green-400);
+  --text-accent: var(--color-green-700);
+  --text-action: var(--color-green-800);
+  --text-danger: var(--color-red-700);
+  --text-on-action: var(--color-white);
+  --border-subtle: var(--color-green-100);
+  --border-status: var(--color-green-200);
+  --border-danger: var(--color-red-200);
+  --focus-ring-color: var(--color-green-300);
+
+  /* Application shell semantics */
+  --font-family-sans:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --viewport-block-full: 100dvh;
+  --content-max-width: 72rem;
+  --page-inline-padding: var(--space-lg);
+  --header-block-size: 5.5rem;
+  --brand-font-size: var(--font-size-xl);
+  --brand-font-weight: var(--font-weight-strong);
+  --status-padding-block: 0.4rem;
+  --status-padding-inline: var(--space-xs);
+  --status-border-width: var(--border-width-thin);
+  --status-radius: var(--radius-pill);
+  --status-font-size: var(--font-size-sm);
+
+  /* Shared interaction semantics */
+  --focus-ring-width: var(--border-width-strong);
+  --focus-ring-offset: var(--border-width-strong);
+}

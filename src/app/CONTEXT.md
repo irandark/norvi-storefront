@@ -27,16 +27,19 @@ bypass feature domain services.
 
 - Angular router and browser bootstrap.
 - Catalog feature presentation entry point.
+- Shared presentation tokens from `src/styles/_tokens.scss`.
 
 ## Key files
 
 - `app.routes.ts` — route ownership.
 - `app.config.ts` — root providers.
 - `features/catalog/CONTEXT.md` — current storefront feature map.
+- `../styles/CONTEXT.md` — shared visual-token ownership and catalogue.
 
 ## Verification
 
-Run `npm run test`, `npm run build`, and `npm run e2e`.
+Run `npm run lint` (including `lint:styles`), `npm run test`, `npm run build`,
+and `npm run e2e`.
 
 GitHub CI uses `.github/workflows/quality-gate.yml` with Node.js 24.14.0 and npm
 11.11.0. The stable required check is `quality-gate`.

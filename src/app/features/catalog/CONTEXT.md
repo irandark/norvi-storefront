@@ -49,10 +49,16 @@ cross into presentation.
 - `data-access/repositories/http-product-catalog.repository.ts` — adapter.
 - `data-access/transport/catalog-http.service.ts` — HTTP endpoint ownership.
 - `presentation/pages/catalog-page/` — component consuming the domain service.
+- `presentation/pages/catalog-page/_catalog-tokens.scss` — catalog-owned
+  semantic style tokens referencing shared primitives.
 
 ## Verification
 
 Run `npm run test`, `npm run lint`, and `npm run e2e`.
+
+Catalog presentation styles consume global semantic tokens documented in
+`src/styles/CONTEXT.md`. `npm run lint:styles` rejects raw colours outside the
+global palette and dimensions outside owned token-definition files.
 
 ## Decisions and traps
 

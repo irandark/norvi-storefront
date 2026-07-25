@@ -2,7 +2,7 @@
 
 ## Status
 
-Backlog — analysis required before implementation.
+Done on protected merge of PR #2.
 
 ## Priority
 
@@ -11,8 +11,8 @@ not implemented using another set of duplicated literals.
 
 ## Problem
 
-Shared visual values are currently repeated directly in global and component
-SCSS. Examples include:
+At intake, shared visual values were repeated directly in global and component
+SCSS. Examples included:
 
 - `#15251d`, `#315d46`, `#397552`, `#dce5dd`, and `#fff`;
 - `72rem` content width;
@@ -92,6 +92,28 @@ required by a specific asset may remain local when they are not reusable.
   lint infrastructure.
 - How third-party component styles may consume or map to project tokens later.
 - Whether runtime theme switching is explicitly out of scope for this task.
+
+## Analysis decisions
+
+- CSS custom properties in `src/styles/_tokens.scss` own coherent shared
+  primitive scales and application semantics. Feature-specific semantic tokens
+  stay in an owned feature token file and may reference shared primitives.
+- Sass breakpoint variables are deferred until a real viewport breakpoint is
+  introduced; `prefers-reduced-motion` remains a capability query and needs no
+  size token.
+- Exact legacy values are mapped without palette, density, typography, or
+  layout changes. The future approved cobalt/indigo implementation belongs to
+  its design-backed story.
+- A dependency-free, focused-tested repository guard rejects raw colour values
+  outside the global palette, unit-bearing dimensions outside owned token
+  definition files, `.sass`/`.scss`/`.css` bypasses, Angular inline `styles`,
+  and template `style` attributes. Intrinsic zeroes, percentages, fractions,
+  aspect ratios, unitless calculations, `currentColor`, and `transparent` may
+  remain local.
+- Runtime theme switching, third-party mappings, and new brands remain out of
+  scope.
+- Design: Not applicable — this is a behaviour- and appearance-preserving
+  refactor.
 
 ## Design applicability
 

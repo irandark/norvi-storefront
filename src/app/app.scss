@@ -1,32 +1,32 @@
 :host {
   display: block;
-  min-height: 100dvh;
+  min-height: var(--viewport-block-full);
 }
 
 .site-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 72rem;
+  max-width: var(--content-max-width);
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: var(--page-inline-padding);
 }
 
 .brand {
-  color: #15251d;
-  font-size: 1.125rem;
-  font-weight: 750;
+  color: var(--text-primary);
+  font-size: var(--brand-font-size);
+  font-weight: var(--brand-font-weight);
   text-decoration: none;
 }
 
 .baseline-status {
-  padding: 0.4rem 0.75rem;
-  border: 1px solid #bed3c6;
-  border-radius: 999px;
-  color: #315d46;
-  font-size: 0.8rem;
+  padding: var(--status-padding-block) var(--status-padding-inline);
+  border: var(--status-border-width) solid var(--border-status);
+  border-radius: var(--status-radius);
+  color: var(--text-action);
+  font-size: var(--status-font-size);
 }
 
 main {
-  min-height: calc(100dvh - 5.5rem);
+  min-height: calc(var(--viewport-block-full) - var(--header-block-size));
 }
