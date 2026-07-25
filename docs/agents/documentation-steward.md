@@ -22,6 +22,9 @@ behaviour synchronized.
   files to read without loading the complete project history.
 - Remove stale detail and link to authoritative product, architecture, design,
   and task records instead of duplicating them.
+- Verify affected `CONTEXT.md` files name the explicit initialization mechanism,
+  page/facade/component/directive responsibilities, capability ownership,
+  expected consumers, and exact public `domain/index.ts` where applicable.
 
 ## Prohibited
 

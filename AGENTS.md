@@ -77,6 +77,32 @@ development. Deliver product changes as narrow, testable vertical slices.
 - Direct delivery to `main` is prohibited. A task reaches `Done` only after its
   dedicated pull request passes mandatory CI and is merged.
 
+- Constructors are for dependency acquisition and framework-required reactive
+  registration only. They must not start HTTP requests, subscribe to workflow
+  streams, navigate, mutate business state, or perform DOM work. Initial
+  workflows start explicitly through route resolution, an application/route
+  initializer, a lifecycle method, or an idempotent facade use case.
+- Route/page components are composition roots, not feature implementations.
+  They bind route inputs to a facade, render child components, and translate
+  child outputs into use cases. They do not simultaneously own navigation,
+  remote-data orchestration, announcements, focus management, scroll locking,
+  keyboard interaction, and detailed rendering.
+- When a presentation surface coordinates three or more concerns or services,
+  introduce a facade/container boundary. Extract independently testable visual
+  regions into input/output-only presentational components. Extract reusable
+  DOM behaviour such as outside-click, focus trapping, roving focus, and scroll
+  locking into focused directives or UI services.
+- Do not use one large component/template when responsibilities have independent
+  reasons to change. Decomposition must follow ownership and behaviour, not an
+  arbitrary line-count target.
+- Before placing a domain model, port, repository, DTO, or HTTP transport under
+  a route feature, evaluate its consumers. Reusable business capabilities such
+  as products belong to their own capability boundary with an explicit
+  `domain/index.ts`; route features compose that public API. `core` is not a
+  dumping ground for reusable business code.
+- Cross-feature consumers import only the capability's exact public domain
+  entry point. A consuming feature owns its own task-specific snapshot/value
+  model when it does not require the source aggregate itself.
 - Every business feature has an explicit domain layer.
 - Components inject domain services only and communicate using domain models and
   use cases.
