@@ -41,6 +41,34 @@
 - Documentation verdict: pending.
 - Module context files checked: application shell.
 
+## Delivery loop — iteration 3
+
+- Iteration: 3.
+- Reason: prove failure blocking, correct the deterministic install, and run the
+  complete remote gate.
+- Active roles: orchestrator/developer, architect, tester, reviewer, and
+  documentation steward.
+- Architect verdict: Pass; D-001 through D-006 closed.
+- Dedicated delivery: branch `agent/initial-import`, [PR #1][pr].
+- Initial canary workflow: [run 30172864161][canary-run], Failed during
+  dependency installation before reaching the canary step.
+- First workflow without the canary: [run 30172890692][lock-run], Failed during
+  the same deterministic install because npm 11.11.0 found three optional peer
+  packages missing from the lockfile.
+- Disposition: regenerated only `package-lock.json` with npm 11.11.0; a clean
+  local `npm ci` and `npm run verify` then passed.
+- Corrected remote gate: [run 30172960924][passing-run], Pass.
+- Branch protection API: PR required, strict `quality-gate`, administrator
+  enforcement, linear history, no force pushes, and no deletion.
+- Direct-push mutation test: not executed because the execution safety layer
+  correctly rejected an operation that could modify `main` if protection were
+  misconfigured; read-only protection evidence is used instead.
+- Tester verdict: Pass with evidence correction requested.
+- Reviewer verdict: Changes requested until the canary claim and PR body are
+  corrected.
+- Documentation verdict: Stale until task, evidence, and PR state are
+  synchronized.
+
 ## Findings
 
 | ID    | Severity | Owner     | Status                  | Evidence or accepted-risk decision           |
@@ -52,12 +80,23 @@
 | D-005 | P1       | Developer | Fixed, awaiting recheck | Read-only, stable, complete CI job           |
 | D-006 | P2       | Developer | Fixed, awaiting recheck | Concurrency and immutable action SHAs        |
 
+Architect recheck closed D-001 through D-006. The iteration 3 reviewer and
+documentation findings are corrected in the current branch and await final
+recheck.
+
 ## Final gate
 
 - Local `npm run verify`: Pass.
-- Initial GitHub Actions failure test: pending.
-- Corrected GitHub Actions pass: pending.
-- Protected direct-push rejection: pending.
-- Initial-import PR: pending.
+- Failing-stage behaviour: Pass — two dependency-install failures made the
+  required check fail and blocked merge. The planned canary itself was not
+  reached and is not claimed as evidence.
+- Corrected GitHub Actions pass: Pass.
+- Protected-main contract: Pass through read-only GitHub protection API.
+- Initial-import PR: [PR #1][pr], open draft with green required check.
 - Open accepted risks: none.
 - Orchestrator final status: In progress.
+
+[pr]: https://github.com/irandark/norvi-storefront/pull/1
+[canary-run]: https://github.com/irandark/norvi-storefront/actions/runs/30172864161
+[lock-run]: https://github.com/irandark/norvi-storefront/actions/runs/30172890692
+[passing-run]: https://github.com/irandark/norvi-storefront/actions/runs/30172960924

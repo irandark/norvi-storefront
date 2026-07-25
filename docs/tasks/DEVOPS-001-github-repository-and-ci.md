@@ -2,17 +2,19 @@
 
 ## Status
 
-In progress — remote bootstrap protected; initial-import PR in preparation.
+In review — protected initial-import PR #1 is open with a passing quality gate.
 
 ## Outcome
 
 The complete frontend project is versioned in a GitHub repository and every
-push or pull request is protected by the same quality gates used locally.
+pull request targeting `main`, plus every resulting push to `main`, is protected
+by the same quality gates used locally.
 
 ## Confirmed context
 
 - GitHub account: `irandark`.
-- The project is not currently a Git repository.
+- Historical intake state: the project was not a Git repository. It is now on
+  `agent/initial-import`, tracking `origin/agent/initial-import`.
 - GitHub is the selected hosting provider.
 - `.gitignore` already excludes dependencies, build output, coverage output,
   Angular cache, temporary files, and system files.
@@ -26,7 +28,8 @@ push or pull request is protected by the same quality gates used locally.
 - Use `main` as the default branch.
 - Create the GitHub repository under the human-selected owner and name.
 - Commit the current project as the intentional initial baseline.
-- Push `main` to GitHub.
+- Create a minimal remote bootstrap for `main`, protect it, and import the
+  project through `agent/initial-import` and PR #1.
 - Add GitHub Actions for:
   - deterministic `npm ci`;
   - lint;

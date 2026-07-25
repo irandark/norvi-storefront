@@ -11,36 +11,36 @@ Backlog → Ready → In progress → In review → Done
                          ↘ Blocked
 ```
 
-| Field | Meaning |
-| --- | --- |
-| Key | Stable project identifier; never reuse it |
-| Type | Story, Task, Bug, Design, Tech debt, or DevOps |
-| Priority | P0 critical, P1 high, P2 normal, P3 low |
-| Status | Backlog, Ready, In progress, In review, Blocked, or Done |
-| Depends on | Keys that must be completed first |
-| Specification | Detailed scope and acceptance criteria |
+| Field         | Meaning                                                  |
+| ------------- | -------------------------------------------------------- |
+| Key           | Stable project identifier; never reuse it                |
+| Type          | Story, Task, Bug, Design, Tech debt, or DevOps           |
+| Priority      | P0 critical, P1 high, P2 normal, P3 low                  |
+| Status        | Backlog, Ready, In progress, In review, Blocked, or Done |
+| Depends on    | Keys that must be completed first                        |
+| Specification | Detailed scope and acceptance criteria                   |
 
 ## Active board
 
-| Key | Type | Summary | Priority | Status | Depends on | Specification |
-| --- | --- | --- | --- | --- | --- | --- |
-| TD-003 | Tech debt | Introduce reusable design tokens for all shared style values | P1 | Backlog | SHOP-002 | `docs/tasks/TD-003-reusable-design-tokens.md` |
-| SHOP-003 | Story | Implement the approved storefront layout and backend-owned product groups | P1 | Backlog | SHOP-002, TD-001, TD-003 | To create before implementation |
-| DESIGN-003 | Design | Design loading, error, empty, focus, selected, and refetch states | P1 | Backlog | SHOP-002 | To create before presentation work |
-| DEVOPS-001 | DevOps | Publish the frontend to GitHub and add Actions quality gates | P2 | In progress | HARNESS-001 | `docs/tasks/DEVOPS-001-github-repository-and-ci.md` |
-| SHOP-004 | Story | Add products to the cart | P2 | Backlog | SHOP-003 | To create |
-| SHOP-005 | Story | Change quantities, remove lines, and restore the cart | P2 | Backlog | SHOP-004 | To create |
-| SHOP-006 | Story | Submit checkout exactly once | P2 | Backlog | SHOP-005 | To create |
+| Key        | Type      | Summary                                                                   | Priority | Status    | Depends on               | Specification                                       |
+| ---------- | --------- | ------------------------------------------------------------------------- | -------- | --------- | ------------------------ | --------------------------------------------------- |
+| TD-003     | Tech debt | Introduce reusable design tokens for all shared style values              | P1       | Backlog   | SHOP-002                 | `docs/tasks/TD-003-reusable-design-tokens.md`       |
+| SHOP-003   | Story     | Implement the approved storefront layout and backend-owned product groups | P1       | Backlog   | SHOP-002, TD-001, TD-003 | To create before implementation                     |
+| DESIGN-003 | Design    | Design loading, error, empty, focus, selected, and refetch states         | P1       | Backlog   | SHOP-002                 | To create before presentation work                  |
+| DEVOPS-001 | DevOps    | Publish the frontend to GitHub and add Actions quality gates              | P2       | In review | HARNESS-001              | `docs/tasks/DEVOPS-001-github-repository-and-ci.md` |
+| SHOP-004   | Story     | Add products to the cart                                                  | P2       | Backlog   | SHOP-003                 | To create                                           |
+| SHOP-005   | Story     | Change quantities, remove lines, and restore the cart                     | P2       | Backlog   | SHOP-004                 | To create                                           |
+| SHOP-006   | Story     | Submit checkout exactly once                                              | P2       | Backlog   | SHOP-005                 | To create                                           |
 
 ## Completed
 
-| Key | Type | Summary | Status | Specification |
-| --- | --- | --- | --- | --- |
-| HARNESS-001 | Task | Full analyst-to-delivery multi-agent harness | Done | `docs/tasks/HARNESS-001-multi-agent-quality-roles.md` |
-| SHOP-001 | Story | Product catalog vertical slice | Done | `docs/tasks/001-product-catalog.md` |
-| SHOP-002 | Design | Storefront layout and product-group navigation | Done | `docs/tasks/002-storefront-layout-and-product-groups-design.md` |
-| TD-001 | Tech debt | Introduce the catalog domain boundary | Done | `docs/tasks/TD-001-catalog-domain-boundary.md` |
-| TD-002 | Tech debt | Approve the original catalog design | Superseded | `docs/tasks/TD-002-catalog-design-approval.md` |
+| Key         | Type      | Summary                                        | Status     | Specification                                                   |
+| ----------- | --------- | ---------------------------------------------- | ---------- | --------------------------------------------------------------- |
+| HARNESS-001 | Task      | Full analyst-to-delivery multi-agent harness   | Done       | `docs/tasks/HARNESS-001-multi-agent-quality-roles.md`           |
+| SHOP-001    | Story     | Product catalog vertical slice                 | Done       | `docs/tasks/001-product-catalog.md`                             |
+| SHOP-002    | Design    | Storefront layout and product-group navigation | Done       | `docs/tasks/002-storefront-layout-and-product-groups-design.md` |
+| TD-001      | Tech debt | Introduce the catalog domain boundary          | Done       | `docs/tasks/TD-001-catalog-domain-boundary.md`                  |
+| TD-002      | Tech debt | Approve the original catalog design            | Superseded | `docs/tasks/TD-002-catalog-design-approval.md`                  |
 
 ## Working rules
 
