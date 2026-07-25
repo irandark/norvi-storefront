@@ -52,6 +52,32 @@ src/app/features/<feature>/
 
 Do not create empty directories in anticipation of future work.
 
+Route ownership and reusable business capability ownership are different
+boundaries. A route feature owns the workflow unique to that route. A business
+concept expected to serve multiple workflows owns a capability boundary:
+
+```text
+src/app/features/products/
+├── domain/
+│   ├── index.ts
+│   ├── models/
+│   └── ports/
+└── data-access/
+    ├── dto/
+    ├── mappers/
+    ├── repositories/
+    └── transport/
+
+src/app/features/catalog/
+├── domain/          # catalog selection and browsing workflow
+└── presentation/    # catalog route composition
+```
+
+Do not move reusable business code to `core`. Promote it to a named capability
+with explicit ownership and a minimal public domain API. Before creating
+feature-local domain/data-access code, record the expected consumers and why
+the chosen boundary is route-specific or reusable.
+
 ## Layer responsibilities
 
 ### Presentation
@@ -63,6 +89,20 @@ Do not create empty directories in anticipation of future work.
 - Does not import DTOs, repositories, transport services, `HttpClient`, endpoint
   constants, or response validators.
 - Does not translate backend errors or backend status codes.
+- A route/page component is a thin composition root. It binds route data or
+  route parameters to a facade/container, supplies state to child views, and
+  translates child outputs into use cases.
+- A facade owns presentation orchestration when a surface coordinates three or
+  more concerns such as route state, domain state, announcements, or several
+  services. A facade must not absorb reusable DOM mechanics.
+- Presentational components receive state through signal inputs and expose user
+  intent through outputs. They do not inject Router, domain repositories,
+  transports, or page-level orchestration services.
+- Reusable DOM interaction belongs in focused directives or UI services:
+  outside-click, focus trap/restore, roving focus, scroll lock, and viewport
+  adaptation are not page-business logic.
+- Split a component when regions or behaviours have independent reasons to
+  change. Line count is supporting evidence, not the decision rule.
 
 ### Domain
 
@@ -138,6 +178,31 @@ internals.
 - Cancellation, queuing, and retry semantics must reflect the business use case
   and have behavioural tests.
 
+## Initialization and constructor rules
+
+Constructors and field initializers may acquire dependencies and register
+framework-required reactive primitives. They must not:
+
+- initiate HTTP or repository requests;
+- subscribe to route, domain, or workflow streams;
+- navigate or canonicalize URLs;
+- mutate business state;
+- read or mutate the DOM;
+- start timers or other externally visible work.
+
+Initial work starts through one explicit, testable mechanism:
+
+- a route resolver or route input when data is required for navigation;
+- an application/route initializer for true bootstrap work;
+- a lifecycle method delegating to an idempotent facade use case;
+- a declarative `toSignal`/`resource` pipeline whose input is explicit and whose
+  cancellation/error semantics are tested.
+
+An Angular `effect` may be registered in an injection context, but it is for
+external side effects, never for synchronizing writable state or hiding initial
+business workflows. Prefer `computed`, `linkedSignal`, `switchMap`, and
+`toSignal` for derived/reactive state.
+
 ## Testing boundaries
 
 - Domain tests cover invariants, use cases, and state transitions without HTTP.
@@ -147,6 +212,15 @@ internals.
 - Component tests replace domain services, never HTTP transports.
 - Integration tests verify the domain port is wired to its repository adapter.
 - Playwright covers a small number of critical user journeys.
+- Facade tests cover route-to-use-case orchestration without rendering the full
+  page.
+- Presentational component tests use inputs/outputs and do not configure HTTP or
+  Router unless the component is itself the route boundary.
+- Directive/UI-service tests cover focus, keyboard, outside-click, scroll-lock,
+  and cleanup independently from business-state tests.
+- Tests must prove that constructing or injecting a service does not start a
+  repository/HTTP workflow unless the documented initialization mechanism is
+  explicitly activated.
 
 ## Mechanical enforcement
 

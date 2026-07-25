@@ -16,6 +16,11 @@ exclusions, dependencies, assumptions, required approvals, and design
 applicability are recorded. Continue clarification while an unanswered question
 can materially change the solution.
 
+For new or changed business models/data access, identify known and credible
+future consumers. Record whether the concept is route-specific, a reusable
+business capability, or a consumer-owned snapshot/value. Do not choose the
+technical structure, but do not hide reuse requirements from the architect.
+
 ## Required output
 
 - Verdict: `Complete` or `Needs human input`.
@@ -23,6 +28,7 @@ can materially change the solution.
 - Functional and non-functional requirements.
 - Acceptance criteria and edge-case matrix.
 - Scope, exclusions, assumptions, dependencies, risks, and accepted deferrals.
+- Known consumers and reuse expectations for affected business concepts.
 - `Design: Required` or `Design: Not applicable`, with rationale.
 
 ## Prohibited

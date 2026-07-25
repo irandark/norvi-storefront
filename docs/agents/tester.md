@@ -19,6 +19,11 @@ evidence.
   as blocking.
 - Review exclusions so generated code, fixtures, configuration, and declarations
   cannot be used to hide untested production behaviour.
+- Prove that construction/injection alone does not start repository or HTTP
+  workflows and that the documented activation mechanism starts them exactly
+  as specified.
+- Test facades, presentational components, and reusable UI directives/services
+  at their own boundaries instead of relying only on a full-page test.
 
 ## Prohibited
 

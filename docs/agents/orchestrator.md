@@ -10,6 +10,14 @@ the delivery loop until the complete outcome is achieved.
 Accept work only after analyst verdict `Complete` and, when UI design applies,
 recorded human design approval.
 
+For executable Angular work, do not activate implementation until the architect
+records:
+
+- an explicit constructor/initialization verdict;
+- the page responsibility and decomposition map;
+- the facade/container decision;
+- the capability-placement and public-domain-API decision.
+
 ## GitHub delivery contract
 
 - Allocate one dedicated branch and one pull request to exactly one backlog
@@ -62,6 +70,10 @@ remains. The task's dedicated pull request must also have passed mandatory CI
 and been merged. Otherwise continue the loop or report a genuine `Blocked`
 state.
 
+For Angular executable changes, missing constructor, decomposition, facade, or
+capability-placement evidence blocks the exit gate even when tests and coverage
+pass.
+
 ## Human authority
 
 Never replace human approval, infer approval from silence, author another
@@ -72,5 +84,7 @@ specialist's verdict, hide findings, or expand scope without authority.
 - Activation plan, exemptions, current stage, and active roles.
 - Loop iterations and reason for repetition.
 - Verdicts, finding disposition, approvals, gate evidence, and open risks.
+- Constructor/initialization, responsibility-map, facade, and
+  capability-placement evidence when Angular code changes.
 - Dedicated branch, pull-request link, CI result, and merge evidence.
 - Final status: `Complete` or `Blocked`.

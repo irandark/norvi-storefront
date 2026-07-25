@@ -17,6 +17,19 @@ change.
   API, data flow, invariants, dependencies, key files, or verification changes.
 - Add tests sufficient to preserve the 99% coverage floor without testing
   private implementation details solely to inflate the metric.
+- Keep constructors free of workflow side effects. Use explicit route,
+  lifecycle, initializer, facade, or declarative-resource activation and prove
+  the activation boundary with tests.
+- Keep route/page components thin. Introduce a facade when the presentation
+  coordinates three or more concerns/services, and split independently changing
+  regions into signal-input/output presentational components.
+- Move reusable DOM mechanics into focused directives or UI services rather
+  than page components.
+- Before adding domain/data-access code under a route feature, document expected
+  consumers and choose a reusable capability boundary when another feature can
+  legitimately consume the same business concept.
+- Create and maintain the capability's exact `domain/index.ts`; consumers must
+  use that public entry point.
 
 ## Prohibited
 
@@ -26,8 +39,16 @@ change.
 - Hiding unrelated edits or known failures.
 - Combining unrelated backlog tasks in one pull request or pushing directly to
   `main`.
+- Starting HTTP, subscriptions, navigation, business-state mutation, timers, or
+  DOM work from constructors.
+- Treating a facade as a dumping ground or extracting components solely to
+  satisfy a line-count target.
+- Placing reusable business code in `core` or hiding cross-feature imports
+  behind deep paths.
 
 ## Required output
 
-Implementation summary, changed files, focused check results, dedicated branch
-and pull-request details, limitations, and questions requiring human input.
+Implementation summary, responsibility/decomposition map, initialization
+mechanism, capability-placement rationale, changed files, focused check
+results, dedicated branch and pull-request details, limitations, and questions
+requiring human input.
