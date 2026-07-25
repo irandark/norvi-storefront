@@ -584,7 +584,19 @@ Key-file links and verification commands resolve to current repository paths.
 
 `DESIGN-003` remains `Done` with its immutable human approval record. No
 behavioural, architectural, or design conflict was found, and no intentional
-documentation gap remains. Delivery operations are intentionally pending with
-the orchestrator: create the dedicated `SHOP-003` pull request, observe the
-mandatory `quality-gate` CI check, merge it, and only then synchronize
-`SHOP-003` to `Done`.
+documentation gap remains.
+
+## Delivery closure
+
+- Dedicated pull request:
+  [#5](https://github.com/irandark/norvi-storefront/pull/5)
+- Head commit after synchronization with `main`:
+  `e3cf775f73a793513b8b352b585f0a98404a5a48`
+- Mandatory CI: `quality-gate` completed successfully in workflow run
+  `30178207203`.
+- Merge method: squash.
+- Merged into `main`: `2026-07-25T22:48:40Z`.
+- Merge commit:
+  `14a835a86fa674ce6fe3532452a2f2a858c63565`.
+- Final status: **Complete / Done**. All exit-gate evidence is present and no
+  required work remains.
