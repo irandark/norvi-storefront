@@ -2,7 +2,7 @@
 
 ## Status
 
-In review in PR #4.
+Done on protected merge of PR #4.
 
 ## Outcome
 
