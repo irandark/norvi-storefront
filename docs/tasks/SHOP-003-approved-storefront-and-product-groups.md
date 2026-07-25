@@ -2,9 +2,10 @@
 
 ## Status
 
-In review — implementation and the independent architect, tester, reviewer, and
-documentation-steward gates pass. The dedicated pull request, mandatory CI, and
-merge required for `Done` have not yet occurred.
+Done — implementation and all independent specialist gates passed. Dedicated
+[pull request #5](https://github.com/irandark/norvi-storefront/pull/5) passed
+the mandatory `quality-gate` and was squash-merged into `main` as
+`14a835a86fa674ce6fe3532452a2f2a858c63565`.
 
 ## User value and final outcome
 
