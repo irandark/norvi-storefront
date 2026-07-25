@@ -63,22 +63,21 @@
 - Direct-push mutation test: not executed because the execution safety layer
   correctly rejected an operation that could modify `main` if protection were
   misconfigured; read-only protection evidence is used instead.
-- Tester verdict: Pass with evidence correction requested.
-- Reviewer verdict: Changes requested until the canary claim and PR body are
-  corrected.
-- Documentation verdict: Stale until task, evidence, and PR state are
-  synchronized.
+- Tester verdict: Pass; 34 tests, 100% coverage in all metrics, production
+  build, and 5/5 Playwright.
+- Reviewer verdict: Approve; evidence-integrity findings corrected.
+- Documentation verdict: Current; status and PR evidence synchronized.
 
 ## Findings
 
-| ID    | Severity | Owner     | Status                  | Evidence or accepted-risk decision           |
-| ----- | -------- | --------- | ----------------------- | -------------------------------------------- |
-| D-001 | P1       | Developer | Fixed, awaiting recheck | Minimal bootstrap and immediate protection   |
-| D-002 | P1       | Developer | Fixed, awaiting recheck | Secret ignore patterns and staged-tree audit |
-| D-003 | P1       | Developer | Fixed, awaiting recheck | Concrete protected-main contract             |
-| D-004 | P1       | Developer | Fixed, awaiting recheck | Node/npm and deterministic install pinned    |
-| D-005 | P1       | Developer | Fixed, awaiting recheck | Read-only, stable, complete CI job           |
-| D-006 | P2       | Developer | Fixed, awaiting recheck | Concurrency and immutable action SHAs        |
+| ID    | Severity | Owner     | Status | Evidence or accepted-risk decision           |
+| ----- | -------- | --------- | ------ | -------------------------------------------- |
+| D-001 | P1       | Developer | Closed | Minimal bootstrap and immediate protection   |
+| D-002 | P1       | Developer | Closed | Secret ignore patterns and staged-tree audit |
+| D-003 | P1       | Developer | Closed | Concrete protected-main contract             |
+| D-004 | P1       | Developer | Closed | Node/npm and deterministic install pinned    |
+| D-005 | P1       | Developer | Closed | Read-only, stable, complete CI job           |
+| D-006 | P2       | Developer | Closed | Concurrency and immutable action SHAs        |
 
 Architect recheck closed D-001 through D-006. The iteration 3 reviewer and
 documentation findings are corrected in the current branch and await final
@@ -92,9 +91,10 @@ recheck.
   reached and is not claimed as evidence.
 - Corrected GitHub Actions pass: Pass.
 - Protected-main contract: Pass through read-only GitHub protection API.
-- Initial-import PR: [PR #1][pr], open draft with green required check.
+- Initial-import PR: [PR #1][pr], dedicated merge candidate with green required
+  check.
 - Open accepted risks: none.
-- Orchestrator final status: In progress.
+- Orchestrator final status: Complete on protected merge of PR #1.
 
 [pr]: https://github.com/irandark/norvi-storefront/pull/1
 [canary-run]: https://github.com/irandark/norvi-storefront/actions/runs/30172864161

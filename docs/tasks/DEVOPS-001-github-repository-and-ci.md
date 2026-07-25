@@ -2,7 +2,7 @@
 
 ## Status
 
-In review — protected initial-import PR #1 is open with a passing quality gate.
+Done on merge of protected initial-import PR #1.
 
 ## Outcome
 
