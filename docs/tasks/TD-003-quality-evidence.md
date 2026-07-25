@@ -5,7 +5,7 @@
 - Analysis verdict: Complete.
 - Design verdict: Not applicable — appearance-preserving refactor.
 - Human approval: execute backlog task TD-003.
-- Dedicated delivery: branch `agent/td-003-design-tokens`; PR pending.
+- Dedicated delivery: branch `agent/td-003-design-tokens`; [PR #2][pr].
 - Active roles: analyst/orchestrator/developer, architect, tester, reviewer, and
   documentation steward.
 - Exemptions: designer not applicable.
@@ -60,5 +60,9 @@
 - Visual comparison: Pass — desktop 1440×1000 and mobile 375×812 rendered with
   the exact legacy values; manual inspection found no material change and no
   browser console errors.
-- Pull request and remote CI: pending.
-- Orchestrator status: In review.
+- Pull request: [PR #2][pr], dedicated merge candidate.
+- Remote CI: [quality-gate run 30175199558][ci], Pass.
+- Orchestrator status: Complete on protected merge of PR #2.
+
+[pr]: https://github.com/irandark/norvi-storefront/pull/2
+[ci]: https://github.com/irandark/norvi-storefront/actions/runs/30175199558

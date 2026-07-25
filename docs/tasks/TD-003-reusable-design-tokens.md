@@ -2,7 +2,7 @@
 
 ## Status
 
-In review — implementation complete on `agent/td-003-design-tokens`; PR pending.
+Done on protected merge of PR #2.
 
 ## Priority
 
