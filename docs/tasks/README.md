@@ -64,3 +64,9 @@ acceptance. P3 findings may become backlog items.
 
 When work changes state, update both the task specification and its
 `docs/BACKLOG.md` row in the same change.
+
+Statuses are maintained continuously, not reconstructed at closure. Update
+`Ready`, `In progress`, `In review`, `Blocked`, and `Done` immediately when the
+corresponding gate or event occurs. Before every specialist handoff and human
+progress report, verify that the backlog row, task status, quality evidence,
+branch/PR state, and actual work stage agree.
