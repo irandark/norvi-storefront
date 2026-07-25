@@ -40,11 +40,6 @@ jobs:
       - name: Install Chromium
         run: npx --no-install playwright install --with-deps chromium
 
-      # Temporary canary for DEVOPS-001. Removed after branch protection and
-      # required-check behavior have been observed on the initial PR.
-      - name: Verify failing-gate canary
-        run: exit 1
-
       - name: Run quality gate
         run: npm run verify
 
