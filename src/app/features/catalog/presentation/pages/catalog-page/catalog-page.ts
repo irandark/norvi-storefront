@@ -15,6 +15,7 @@ import { CatalogPageFacade } from '../../facades/catalog-page.facade';
   imports: [CatalogHeader, CatalogNavigation, CatalogResults],
   providers: [CatalogPageFacade],
   templateUrl: './catalog-page.html',
+  styleUrl: './catalog-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CatalogPage implements OnInit {

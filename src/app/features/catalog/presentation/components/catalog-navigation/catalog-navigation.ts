@@ -15,8 +15,8 @@ import { RovingFocusDirective } from '../../../../../shared/presentation/directi
     RovingFocusDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { style: 'display: contents' },
   templateUrl: './catalog-navigation.html',
+  styleUrl: './catalog-navigation.css',
 })
 export class CatalogNavigation {
   readonly groupsState = input.required<GroupsState>();

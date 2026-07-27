@@ -8,8 +8,8 @@ import { ProductCard } from '../product-card/product-card';
   selector: 'app-catalog-results',
   imports: [ProductCard],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { style: 'display: contents' },
   templateUrl: './catalog-results.html',
+  styleUrl: './catalog-results.css',
 })
 export class CatalogResults {
   protected readonly skeletons = [1, 2, 3, 4];

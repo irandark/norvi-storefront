@@ -25,6 +25,11 @@ change.
   regions into signal-input/output presentational components.
 - Move reusable DOM mechanics into focused directives or UI services rather
   than page components.
+- Keep every production Angular component in three colocated files: the
+  component class in `.ts`, its template in `.html`, and its styles in
+  `.css`/`.scss`. Always use `templateUrl` and `styleUrl`/`styleUrls`; inline
+  component templates and styles are prohibited, including for small
+  components.
 - Before adding domain/data-access code under a route feature, document expected
   consumers and choose a reusable capability boundary when another feature can
   legitimately consume the same business concept.
