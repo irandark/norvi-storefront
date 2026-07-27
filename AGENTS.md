@@ -22,14 +22,16 @@ development. Deliver product changes as narrow, testable vertical slices.
 1. The analyst inspects existing sources and clarifies the human's goal until
    the analysis completion gate in `docs/agents/analyst.md` passes.
 2. Find or create the work item in `docs/BACKLOG.md` and its detailed task spec.
-3. For new or materially changed UI, the designer completes the design gate and
+3. For every material task, the architect conducts discovery, gives the human
+   actionable feedback, and records decisions or unresolved blockers.
+4. For new or materially changed UI, the designer completes the design gate and
    obtains explicit human approval. Otherwise record `Design: Not applicable`.
-4. The orchestrator accepts the complete handoff and records role activation.
-5. The architect records constraints before implementation when boundaries or
-   contracts may change.
-6. The developer implements the smallest coherent change with focused tests.
-7. The tester, reviewer, architect, and documentation steward produce
-   independent verdicts.
+5. The orchestrator accepts the complete handoff and records role activation.
+6. When architecture applies, the architect records implementation constraints
+   before the developer implements the smallest coherent change with focused
+   tests.
+7. The tester, reviewer, documentation steward, and, when architecture applies,
+   architect produce independent verdicts.
 8. Findings return to the responsible role and the relevant stages repeat.
 9. The orchestrator runs `npm run verify`, performs required visual comparison,
    and closes only when the exit gate in `docs/agents/orchestrator.md` passes.
@@ -59,6 +61,14 @@ development. Deliver product changes as narrow, testable vertical slices.
 ## Non-negotiable rules
 
 - Human approval cannot be inferred or replaced by an agent.
+- Every material feature, technical-debt item, architecture proposal, or other
+  materially scoped task requires architect-led discovery after analyst
+  completion and before implementation readiness. Unresolved material
+  questions block implementation.
+- When waiting would cause material harm, an urgent defect may bypass the normal
+  discovery gate only for the smallest reversible containment. Record the
+  urgency, containment limits and rollback, and deferred questions before
+  activation; obtain the retrospective human decision immediately afterward.
 - Analyst, designer, developer, architect, tester, reviewer, and documentation
   steward are independent assignments when their roles apply.
 - The orchestrator activates and releases agents only for bounded work and

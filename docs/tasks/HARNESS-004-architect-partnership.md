@@ -2,7 +2,7 @@
 
 ## Status
 
-Backlog.
+In review.
 
 ## Priority
 
@@ -80,6 +80,76 @@ Not applicable — this changes delivery governance, not the storefront UI.
   mechanism; otherwise record a manual walkthrough in quality evidence.
 - Confirm the backlog row and this specification have matching status.
 
+Quality evidence: `docs/tasks/HARNESS-004-quality-evidence.md`.
+
 ## Dependencies
 
 - HARNESS-001 — multi-agent quality roles.
+
+## Architect discovery decision
+
+The analyst found one material workflow decision that must be resolved before
+implementation:
+
+- Should every material feature, technical-debt item, and architecture change
+  require only an architect-led discovery-and-human-decision gate, while the
+  later implementation and final architecture review remain conditional on
+  affected boundaries and contracts?
+- Or should the complete architect role, including implementation constraints
+  and final diff review, become mandatory for every such task?
+
+The first option preserves a universal early decision conversation without
+forcing a full architecture review onto work that has no architectural impact.
+The second option is stricter but adds the complete architecture cycle to every
+material task.
+
+Human decision: Option A approved on 2026-07-27. Every material feature,
+technical-debt item, and architecture proposal receives a mandatory architect
+discovery-and-human-decision gate after analyst completion and before
+orchestrator implementation readiness. The later implementation-constraint and
+final-diff architecture reviews remain conditional under the existing
+architecture applicability rules.
+
+Confirmed stage order:
+
+1. The analyst completes the clarified proposal.
+2. The architect conducts discovery and records decisions or blockers.
+3. The orchestrator activates implementation only after all material human
+   decisions are recorded.
+
+## Recorded discovery evidence
+
+- Analyst verdict: `Complete`. The governance outcome, acceptance criteria,
+  exclusions, edge cases, design applicability, dependency, and the single
+  material workflow choice were recorded.
+- Architect feedback: universal early discovery makes the human an explicit
+  decision partner; making the entire architecture cycle universal would add
+  avoidable review work where no boundary, contract, dependency, ownership,
+  security, or cross-layer behaviour is affected.
+- Decision question: choose universal discovery with conditional delivery
+  reviews (Option A), or a universal complete architecture cycle (Option B).
+- Recommendation: Option A, because it preserves the decision gate while
+  keeping later architecture work proportional to architectural impact.
+- Human decision: Option A approved on 2026-07-27.
+- Rejected option: Option B, the mandatory complete architecture cycle for
+  every material task.
+- Unresolved assumptions: none.
+- Architect discovery verdict: `Complete`; implementation may proceed under the
+  approved constraints.
+
+## Implementation constraints
+
+- Keep discovery mandatory for every material feature, technical-debt item,
+  architecture proposal, and other materially scoped task.
+- Keep implementation constraints and final diff review conditional on
+  boundaries, contracts, dependencies, ownership, security, or cross-layer
+  behaviour.
+- A material unresolved decision blocks implementation and is recorded with the
+  task status `Blocked`.
+- A fully determined proposal receives a concise rationale and human
+  confirmation, not manufactured questions.
+- Urgent defect mitigation is limited to the smallest reversible containment
+  needed to avoid material harm; deferred decisions receive immediate
+  retrospective review.
+- Architect discovery never replaces explicit design approval for new or
+  materially changed UI.
