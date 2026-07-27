@@ -35,6 +35,7 @@ Backlog → Ready → In progress → In review → Done
 | SHOP-004   | Story     | Add products to the cart                                                  | P2       | Backlog | SHOP-003                 | To create                                           |
 | SHOP-005   | Story     | Change quantities, remove lines, and restore the cart                     | P2       | Backlog | SHOP-004                 | To create                                           |
 | SHOP-006   | Story     | Submit checkout exactly once                                              | P2       | Backlog | SHOP-005                 | To create                                           |
+| HARNESS-004 | Task     | Make architect-led discovery and human decision-making mandatory          | P1       | Backlog | HARNESS-001              | `docs/tasks/HARNESS-004-architect-partnership.md`   |
 
 ## Completed
 
