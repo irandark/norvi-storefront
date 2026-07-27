@@ -2,7 +2,42 @@
 
 ## Status
 
-Backlog.
+In review.
+
+## Analyst and architect discovery
+
+- Analyst verdict: `Complete`.
+- Design: `Not applicable` — this is a behaviour- and appearance-preserving
+  refactor against the approved `SHOP-002` and `DESIGN-003` baselines.
+- Architect discovery: `Complete`.
+- Human decision: use separate `catalog` and `products` capabilities; activate
+  catalog explicitly and idempotently through lifecycle → `CatalogPageFacade`;
+  keep `CatalogPage` thin; use input/output-only visual components; extract
+  focus trapping/restoration, roving keyboard focus, outside-click, and body
+  scroll locking into reusable Angular directives; preserve behaviour and
+  visuals; add no dependencies.
+- Rejected alternatives: keeping reusable products under catalog; mechanically
+  splitting markup while leaving a facade monolith; introducing NgRx, CDK, or
+  another state/UI dependency; retaining page-specific DOM utilities.
+- Unresolved assumptions: none.
+
+### Architect implementation constraints
+
+- Directive APIs are UI-behaviour-only and contain no catalog or product
+  business language.
+- Directives use host bindings and component-scoped references, clean up all
+  listeners, focus state, and body state on close and destroy, and have focused
+  tests for keyboard, focus, outside-click, scroll-lock, and cleanup behaviour.
+- `CatalogPageFacade` owns route/domain orchestration and announcements, but no
+  reusable DOM mechanics or detailed rendering.
+- Construction and injection remain inert. One idempotent lifecycle activation
+  starts the route and domain workflow.
+- Product requests retain latest-selection-wins cancellation and keep errors
+  inside the inner request pipeline.
+- Products expose an exact, minimal `features/products/domain/index.ts`; catalog
+  group concepts remain catalog-owned.
+- Final architect diff review is required because capability boundaries,
+  initialization, and cross-layer ownership change.
 
 ## Priority
 

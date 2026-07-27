@@ -3,18 +3,23 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { HttpProductCatalogRepository } from './features/catalog/data-access/repositories/http-product-catalog.repository';
-import { CatalogHttpService } from './features/catalog/data-access/transport/catalog-http.service';
-import { ProductCatalogRepository } from './features/catalog/domain/ports/product-catalog.repository';
+import { HttpProductGroupRepository } from './features/catalog/data-access/repositories/http-product-group.repository';
+import { ProductGroupHttpService } from './features/catalog/data-access/transport/product-group-http.service';
+import { ProductGroupRepository } from './features/catalog/domain';
 import { CatalogService } from './features/catalog/domain/services/catalog.service';
+import { HttpProductRepository } from './features/products/data-access/repositories/http-product.repository';
+import { ProductHttpService } from './features/products/data-access/transport/product-http.service';
+import { ProductRepository } from './features/products/domain';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(),
     provideRouter(routes),
-    CatalogHttpService,
+    ProductGroupHttpService,
+    ProductHttpService,
     CatalogService,
-    { provide: ProductCatalogRepository, useClass: HttpProductCatalogRepository },
+    { provide: ProductGroupRepository, useClass: HttpProductGroupRepository },
+    { provide: ProductRepository, useClass: HttpProductRepository },
   ],
 };

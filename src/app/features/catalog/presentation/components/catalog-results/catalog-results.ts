@@ -1,0 +1,88 @@
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import type { Product } from '../../../../products/domain';
+import type { CatalogSelection } from '../../../domain/models/product-group';
+import type { ProductsState } from '../../../domain/services/catalog.service';
+import { ProductCard } from '../product-card/product-card';
+
+@Component({
+  selector: 'app-catalog-results',
+  imports: [ProductCard],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { style: 'display: contents' },
+  template: `
+    <header class="catalog__header">
+      <div class="catalog-title-block">
+        <p class="catalog__eyebrow">Подборка Норви</p>
+        @if (state().status === 'idle') {
+          <span class="heading-skeleton" aria-hidden="true"></span>
+        } @else {
+          <h1 id="catalog-title">{{ selection().name }}</h1>
+        }
+      </div>
+      <div>
+        @if (resultCount() !== null) {
+          <p class="result-count">{{ resultCount() }} товаров</p>
+        } @else {
+          <span class="count-skeleton" aria-hidden="true"></span>
+        }
+      </div>
+    </header>
+    <div class="results" [attr.aria-busy]="state().status === 'loading'" aria-live="off">
+      @switch (state().status) {
+        @case ('idle') {
+          <div class="skeleton-grid" aria-hidden="true">
+            @for (item of skeletons; track item) { <div class="product-skeleton"></div> }
+          </div>
+        }
+        @case ('loading') {
+          <p class="loading-label">{{ loadingLabel() }}</p>
+          <div class="skeleton-grid" aria-hidden="true">
+            @for (item of skeletons; track item) { <div class="product-skeleton"></div> }
+          </div>
+        }
+        @case ('error') {
+          <div class="state-card state-card--error" role="alert">
+            <h2 id="products-error-title">Не удалось загрузить товары</h2>
+            <p>Попробуйте ещё раз — выбранная категория сохранена.</p>
+            <button type="button" aria-describedby="products-error-title" (click)="retry.emit()">Повторить загрузку</button>
+          </div>
+        }
+        @case ('empty') {
+          <div class="state-card" data-testid="catalog-empty">
+            @if (selection().kind === 'all') {
+              <h2>В магазине пока нет товаров</h2>
+              <p>Загляните позже — мы пополняем ассортимент.</p>
+            } @else {
+              <h2>В этой категории пока нет товаров</h2>
+              <p>Посмотрите полный ассортимент магазина.</p>
+              <button type="button" (click)="showAll.emit()">Показать все товары</button>
+            }
+          </div>
+        }
+        @case ('loaded') {
+          <div class="product-grid">
+            @for (product of products(); track product.id) {
+              <app-product-card [product]="product" />
+            }
+          </div>
+        }
+      }
+    </div>
+  `,
+})
+export class CatalogResults {
+  protected readonly skeletons = [1, 2, 3, 4];
+  readonly state = input.required<ProductsState>();
+  readonly selection = input.required<CatalogSelection>();
+  readonly products = input.required<readonly Product[]>();
+  readonly resultCount = input.required<number | null>();
+  readonly retry = output<void>();
+  readonly showAll = output<void>();
+
+  protected loadingLabel(): string {
+    const state = this.state();
+    return state.status === 'loading' && state.mode === 'refetch'
+      ? 'Обновляем товары'
+      : 'Загружаем товары';
+  }
+}

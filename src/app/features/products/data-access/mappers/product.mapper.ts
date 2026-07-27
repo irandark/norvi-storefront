@@ -1,5 +1,5 @@
+import type { Product } from '../../domain';
 import type { ProductDto } from '../dto/product.dto';
-import type { Product } from '../../domain/models/product';
 
 export function mapProductDto(dto: ProductDto): Product {
   return {

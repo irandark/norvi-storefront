@@ -1,7 +1,7 @@
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
-import type { Product } from '../../../domain/models/product';
+import type { Product } from '../../../../products/domain';
 import type { CatalogSelection, ProductGroup } from '../../../domain/models/product-group';
 import {
   CatalogService,
@@ -9,6 +9,7 @@ import {
   type ProductsState,
 } from '../../../domain/services/catalog.service';
 import { CatalogPage } from './catalog-page';
+import { CatalogPageFacade } from '../../facades/catalog-page.facade';
 
 const group: ProductGroup = { id: 'home', slug: 'dlya-doma', name: 'Для дома' };
 const product: Product = {
@@ -16,17 +17,10 @@ const product: Product = {
   imageUrl: '/image.svg', stock: 0,
 };
 
-interface PageControls {
-  openNavigation(): void;
-  closeNavigation(restoreFocus?: boolean): void;
-  selectAll(): void;
-  onOptionKeydown(event: KeyboardEvent): void;
-  onNavigationKeydown(event: KeyboardEvent): void;
-  onDocumentPointerDown(event: PointerEvent): void;
-  focusNavigationTarget(): void;
-}
-
-function setup(productState: ProductsState = { status: 'loaded', products: [product] }) {
+function setup(
+  productState: ProductsState = { status: 'loaded', products: [product] },
+  detectChanges = true,
+) {
   const groupsState = signal<GroupsState>({ status: 'loaded', groups: [group] });
   const productsState = signal<ProductsState>(productState);
   const selection = signal<CatalogSelection>({ kind: 'all', name: 'Все товары' });
@@ -48,6 +42,7 @@ function setup(productState: ProductsState = { status: 'loaded', products: [prod
       const state = productsState();
       return state.status === 'loaded' ? state.products.length : state.status === 'empty' ? 0 : null;
     },
+    activate: vi.fn(),
     activateUrlSelection: vi.fn(),
     retryGroups: vi.fn(),
     retryProducts: vi.fn(),
@@ -57,11 +52,31 @@ function setup(productState: ProductsState = { status: 'loaded', products: [prod
     providers: [{ provide: CatalogService, useValue: service }, provideRouter([])],
   });
   const fixture = TestBed.createComponent(CatalogPage);
-  fixture.detectChanges();
+  if (detectChanges) fixture.detectChanges();
   return { fixture, service, groupsState, productsState, selection, canonicalization };
 }
 
 describe('CatalogPage', () => {
+  it('does not read viewport or activate workflows during construction', () => {
+    const originalMatchMedia = globalThis.matchMedia;
+    const matchMediaSpy = vi.fn(() => ({ matches: false })) as unknown as typeof matchMedia;
+    globalThis.matchMedia = matchMediaSpy;
+    const { fixture, service } = setup({ status: 'idle' }, false);
+    expect(matchMediaSpy).not.toHaveBeenCalled();
+    expect(service.activate).not.toHaveBeenCalled();
+    fixture.detectChanges();
+    expect(matchMediaSpy).toHaveBeenCalledOnce();
+    expect(service.activate).toHaveBeenCalledOnce();
+    globalThis.matchMedia = originalMatchMedia;
+  });
+
+  it('activates the catalog through its facade lifecycle', () => {
+    const { fixture, service } = setup();
+    expect(service.activate).toHaveBeenCalledOnce();
+    fixture.debugElement.injector.get(CatalogPageFacade).activate();
+    expect(service.activate).toHaveBeenCalledOnce();
+  });
+
   it('renders loaded products, price, count and availability', () => {
     const { fixture, productsState } = setup();
     expect(fixture.nativeElement.textContent).toContain('Все товары');
@@ -81,6 +96,11 @@ describe('CatalogPage', () => {
   ])('renders product state %o', (state, copy) => {
     const { fixture } = setup(state);
     expect(fixture.nativeElement.textContent).toContain(copy);
+  });
+
+  it('renders no result body for an unknown defensive state', () => {
+    const { fixture } = setup({ status: 'unknown' } as unknown as ProductsState);
+    expect(fixture.nativeElement.querySelector('.results').textContent.trim()).toBe('');
   });
 
   it('renders selected empty action and product retry', () => {
@@ -142,67 +162,54 @@ describe('CatalogPage', () => {
     expect(fixture.nativeElement.querySelector('.catalog-navigation')).toBeNull();
   });
 
-  it('covers keyboard boundaries, mobile focus trap and outside-pointer close', () => {
-    const originalMatchMedia = globalThis.matchMedia;
-    globalThis.matchMedia = vi.fn(() => ({ matches: true })) as unknown as typeof matchMedia;
+  it('closes through backdrop and selects all through navigation actions', () => {
     const { fixture } = setup();
-    const page = fixture.componentInstance as unknown as PageControls;
-    page.onNavigationKeydown(new KeyboardEvent('keydown', { key: 'Tab' }));
-    page.openNavigation();
+    const trigger = fixture.nativeElement.querySelector('.catalog-trigger');
+    trigger.click();
     fixture.detectChanges();
-    const options = Array.from(
-      fixture.nativeElement.querySelectorAll('[role="option"]'),
-    ) as HTMLElement[];
-    for (const key of ['ArrowDown', 'ArrowUp', 'Home', 'End', 'Other']) {
-      options[0].dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
-    }
-    const navigation = fixture.nativeElement.querySelector('.catalog-navigation') as HTMLElement;
-    const close = navigation.querySelector('.close-button') as HTMLElement;
-    close.focus();
-    navigation.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }));
-    const last = Array.from(navigation.querySelectorAll('button')).at(-1) as HTMLElement;
-    last.focus();
-    page.onNavigationKeydown(new KeyboardEvent('keydown', { key: 'Tab' }));
-    options[0].focus();
-    page.onNavigationKeydown(new KeyboardEvent('keydown', { key: 'Tab' }));
-    navigation.dispatchEvent(new KeyboardEvent('keydown', { key: 'x', bubbles: true }));
-    page.onDocumentPointerDown(new PointerEvent('pointerdown'));
-    page.closeNavigation(false);
+    fixture.nativeElement.querySelector('.catalog-navigation__footer button').click();
     fixture.detectChanges();
-    page.focusNavigationTarget();
-    page.selectAll();
-    globalThis.matchMedia = originalMatchMedia;
+    expect(TestBed.inject(Router).url).toBe('/');
+    expect(fixture.nativeElement.querySelector('.catalog-navigation')).toBeNull();
+
+    trigger.click();
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector('[role="option"]').click();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.catalog-navigation')).toBeNull();
+
+    trigger.click();
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector('.close-button').click();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.catalog-navigation')).toBeNull();
+
+    trigger.click();
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector('.navigation-backdrop').click();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.catalog-navigation')).toBeNull();
   });
 
-  it('focuses group failure and falls back to All when a backend option disappears', () => {
-    const { fixture, groupsState } = setup();
-    const page = fixture.componentInstance as unknown as PageControls;
-    page.openNavigation();
+  it('does not treat a non-button toggle target as a restore anchor', () => {
+    const { fixture } = setup();
+    const page = fixture.componentInstance as unknown as {
+      toggleNavigation(target: EventTarget | null): void;
+    };
+    page.toggleNavigation(document.body);
     fixture.detectChanges();
-    groupsState.set({ status: 'error' });
-    fixture.detectChanges();
-    page.focusNavigationTarget();
-    expect(document.activeElement?.id).toBe('group-error-title');
-
-    groupsState.set({ status: 'loaded', groups: [group] });
-    fixture.detectChanges();
-    const options = fixture.nativeElement.querySelectorAll('[role="option"]') as NodeListOf<HTMLElement>;
-    options.forEach((option) => option.setAttribute('aria-selected', 'false'));
-    page.focusNavigationTarget();
-    expect(document.activeElement).toBe(options[0]);
+    expect(fixture.nativeElement.querySelector('.catalog-navigation')).not.toBeNull();
   });
 
-  it('ignores irrelevant pointer events and closes desktop navigation on outside click', () => {
+  it('closes desktop navigation on outside click while ignoring the trigger', () => {
     const originalMatchMedia = globalThis.matchMedia;
     globalThis.matchMedia = vi.fn(() => ({ matches: false })) as unknown as typeof matchMedia;
     const { fixture } = setup();
-    const page = fixture.componentInstance as unknown as PageControls;
-    page.onDocumentPointerDown(new PointerEvent('pointerdown'));
-    page.openNavigation();
+    const trigger = fixture.nativeElement.querySelector('.catalog-trigger');
+    trigger.click();
     fixture.detectChanges();
-    fixture.nativeElement.querySelector('.catalog-trigger').dispatchEvent(
-      new PointerEvent('pointerdown', { bubbles: true }),
-    );
+    trigger.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+    expect(fixture.nativeElement.querySelector('.catalog-navigation')).not.toBeNull();
     document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('.catalog-navigation')).toBeNull();

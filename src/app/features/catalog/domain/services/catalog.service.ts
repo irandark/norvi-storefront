@@ -1,10 +1,12 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
-import { Subscription, take } from 'rxjs';
-import type { Product } from '../models/product';
+import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { catchError, map, of, Subject, switchMap, take } from 'rxjs';
+import { ProductRepository, type Product } from '../../../products/domain';
 import type { CatalogSelection, ProductGroup } from '../models/product-group';
-import { ProductCatalogRepository } from '../ports/product-catalog.repository';
+import { ProductGroupRepository } from '../ports/product-group.repository';
 
 export type GroupsState =
+  | { readonly status: 'idle' }
   | { readonly status: 'loading' }
   | { readonly status: 'loaded'; readonly groups: readonly ProductGroup[] }
   | { readonly status: 'error' };
@@ -23,15 +25,18 @@ export interface CanonicalizationInstruction {
 
 @Injectable()
 export class CatalogService {
-  private readonly repository = inject(ProductCatalogRepository);
-  private readonly groupsSource = signal<GroupsState>({ status: 'loading' });
+  private readonly groupRepository = inject(ProductGroupRepository);
+  private readonly productRepository = inject(ProductRepository);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly groupsSource = signal<GroupsState>({ status: 'idle' });
   private readonly productsSource = signal<ProductsState>({ status: 'idle' });
   private readonly selectionSource = signal<CatalogSelection>({ kind: 'all', name: 'Все товары' });
   private readonly canonicalizationSource = signal<CanonicalizationInstruction | null>(null);
   private requestedSlug: string | null | undefined;
-  private productSubscription?: Subscription;
+  private readonly productRequests = new Subject<CatalogSelection>();
   private hasRequestedProducts = false;
   private canonicalizationId = 0;
+  private activated = false;
 
   readonly groupsState = this.groupsSource.asReadonly();
   readonly productsState = this.productsSource.asReadonly();
@@ -50,7 +55,26 @@ export class CatalogService {
     return state.status === 'loaded' ? state.products.length : state.status === 'empty' ? 0 : null;
   });
 
-  constructor() {
+  activate(): void {
+    if (this.activated) return;
+
+    this.activated = true;
+    this.productRequests
+      .pipe(
+        switchMap((selection) => {
+          const groupId = selection.kind === 'group' ? selection.group.id : undefined;
+          return this.productRepository.getProducts(groupId).pipe(
+            take(1),
+            map(
+              (products): ProductsState =>
+                products.length === 0 ? { status: 'empty' } : { status: 'loaded', products },
+            ),
+            catchError(() => of<ProductsState>({ status: 'error' })),
+          );
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((state) => this.productsSource.set(state));
     this.loadGroups();
   }
 
@@ -74,7 +98,7 @@ export class CatalogService {
 
   private loadGroups(): void {
     this.groupsSource.set({ status: 'loading' });
-    this.repository
+    this.groupRepository
       .getGroups()
       .pipe(take(1))
       .subscribe({
@@ -119,26 +143,12 @@ export class CatalogService {
   }
 
   private loadProducts(selection: CatalogSelection): void {
-    this.productSubscription?.unsubscribe();
     this.productsSource.set({
       status: 'loading',
       mode: this.hasRequestedProducts ? 'refetch' : 'initial',
     });
     this.hasRequestedProducts = true;
 
-    const groupId = selection.kind === 'group' ? selection.group.id : undefined;
-    this.productSubscription = this.repository
-      .getProducts(groupId)
-      .pipe(take(1))
-      .subscribe({
-        next: (products) => {
-          this.productsSource.set(
-            products.length === 0 ? { status: 'empty' } : { status: 'loaded', products },
-          );
-        },
-        error: () => {
-          this.productsSource.set({ status: 'error' });
-        },
-      });
+    this.productRequests.next(selection);
   }
 }
