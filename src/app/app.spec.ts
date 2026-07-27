@@ -26,7 +26,7 @@ describe('App', () => {
   });
 
   it('configures the application providers', () => {
-    expect(appConfig.providers).toHaveLength(6);
+    expect(appConfig.providers).toHaveLength(8);
   });
 
   it('lazy-loads the catalog route', async () => {

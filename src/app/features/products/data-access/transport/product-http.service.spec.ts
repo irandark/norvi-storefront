@@ -1,29 +1,22 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { CatalogHttpService } from './catalog-http.service';
 
-describe('CatalogHttpService', () => {
-  let service: CatalogHttpService;
+import { ProductHttpService } from './product-http.service';
+
+describe('ProductHttpService', () => {
+  let service: ProductHttpService;
   let http: HttpTestingController;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [CatalogHttpService, provideHttpClient(), provideHttpClientTesting()],
+      providers: [ProductHttpService, provideHttpClient(), provideHttpClientTesting()],
     });
-    service = TestBed.inject(CatalogHttpService);
+    service = TestBed.inject(ProductHttpService);
     http = TestBed.inject(HttpTestingController);
   });
-  afterEach(() => http.verify());
 
-  it('loads validated groups from the exact endpoint', () => {
-    const response = [{ id: 'home', slug: 'dlya-doma', name: 'Для дома' }];
-    let actual: unknown;
-    service.getGroups().subscribe((value) => (actual = value));
-    const request = http.expectOne('/api/product-groups');
-    expect(request.request.method).toBe('GET');
-    request.flush(response);
-    expect(actual).toEqual(response);
-  });
+  afterEach(() => http.verify());
 
   it('loads all products without a query', () => {
     service.getProducts().subscribe();

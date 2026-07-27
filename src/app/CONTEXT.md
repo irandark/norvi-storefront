@@ -11,8 +11,9 @@ shell does not own catalog business behaviour or DTO contracts.
 
 - `/` route, currently backed by the catalog page.
 - Root providers in `app.config.ts`.
-- HTTP client and catalog port/repository provider registration. The
-  development harness serves the temporary local API outside Angular.
+- HTTP client plus catalog-group and reusable-product port/repository provider
+  registration. The development harness serves the temporary local API outside
+  Angular.
 
 ## Data and control flow
 
@@ -21,7 +22,7 @@ shell does not own catalog business behaviour or DTO contracts.
 services to data-access adapters. The `scripts/dev-server.mjs` boundary serves
 deterministic `/api/*` responses and proxies other development traffic to
 Angular, so browser tooling can observe and override every API request. Router
-query adaptation stays in the catalog page; business selection stays in
+query adaptation stays in `CatalogPageFacade`; business selection stays in
 `CatalogService`. Other shell files must not import feature internals.
 
 ## Invariants
@@ -42,6 +43,8 @@ query adaptation stays in the catalog page; business selection stays in
 - `app.routes.ts` — route ownership.
 - `app.config.ts` — root providers.
 - `features/catalog/CONTEXT.md` — current storefront feature map.
+- `features/products/CONTEXT.md` — reusable product capability.
+- `shared/presentation/CONTEXT.md` — reusable UI interaction directives.
 - `../styles/CONTEXT.md` — shared visual-token ownership and catalogue.
 
 ## Verification

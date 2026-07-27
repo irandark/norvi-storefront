@@ -2,39 +2,47 @@
 
 ## Responsibility
 
-Owns URL-driven catalog loading, domain product/group models, controlled UI
-states, DTO validation/mapping, and responsive storefront presentation. It does
-not own cart, checkout, or client-side product-group filtering.
+Owns URL-driven catalog browsing, product-group loading and selection, controlled
+UI states, and responsive storefront presentation. Reusable product loading is
+owned by `features/products`. Catalog does not own cart, checkout, or
+client-side product-group filtering.
 
 ## Public surface
 
 - Catalog route presentation entry point.
-- `CatalogService` domain use cases and state.
-- `ProductCatalogRepository` domain port.
-- `ProductGroup` and `CatalogSelection` domain models.
-- Domain `Product` model using integer `priceInCents`.
+- `domain/index.ts` exports only `ProductGroupRepository` for application-root
+  DI wiring.
+- `CatalogService`, `ProductGroup`, and `CatalogSelection` are feature-local
+  domain APIs; cross-feature consumers must not deep-import them.
 
 ## Data and control flow
 
 ```text
-Angular Router query adapter in catalog page
+CatalogPage lifecycle
+→ CatalogPageFacade Router/query adapter
 → CatalogService
-→ ProductCatalogRepository port
-← HttpProductCatalogRepository
-→ CatalogHttpService
+→ ProductGroupRepository / products ProductRepository ports
+← HttpProductGroupRepository / HttpProductRepository
+→ ProductGroupHttpService / ProductHttpService
 → GET /api/product-groups
 → GET /api/products[?groupId=...]
 ```
 
-`CatalogService` resolves URL slugs against ordered backend groups, owns the
-canonical selection and independent group/product state, and cancels a prior
-product subscription before activating a newer request. The transport requests
+`CatalogPage.ngOnInit()` explicitly activates the idempotent facade, which binds
+the route before explicitly activating `CatalogService`. Injection alone is
+inert. The service resolves URL slugs against ordered backend groups, owns the
+canonical selection and independent group/product state. Product requests use
+one `switchMap` pipeline, so a newer selection cancels the prior request; inner
+`catchError` keeps the outer workflow alive. The transport requests
 `unknown`; parsers validate DTOs and repositories map distinct domain values
 before they cross into presentation.
 
 ## Invariants
 
-- Components depend only on domain services and domain models.
+- The route page depends on its presentation facade and visual children.
+- Input/output visual components may use domain-facing types and focused
+  presentation utilities, but never Router, repositories, transports, DTOs, or
+  `HttpClient`.
 - Domain code does not import DTO, repository adapter, transport, or HttpClient.
 - DTO/HTTP details remain in `data-access`.
 - Invalid external data becomes a controlled catalog failure.
@@ -55,12 +63,19 @@ before they cross into presentation.
 ## Key files
 
 - `domain/services/catalog.service.ts` — state transitions and use cases.
-- `domain/ports/product-catalog.repository.ts` — domain data contract.
-- `data-access/repositories/http-product-catalog.repository.ts` — adapter.
-- `data-access/transport/catalog-http.service.ts` — HTTP endpoint ownership.
+- `domain/index.ts` — exact application-composition DI entry point.
+- `domain/ports/product-group.repository.ts` — catalog-owned group contract.
+- `data-access/repositories/http-product-group.repository.ts` — group adapter.
+- `data-access/transport/product-group-http.service.ts` — group endpoint.
+- `../products/CONTEXT.md` — reusable product capability.
 - `scripts/dev-server.mjs` — temporary browser-observable deterministic local
   API and Angular development proxy; it is outside the production bundle.
-- `presentation/pages/catalog-page/` — component consuming the domain service.
+- `presentation/pages/catalog-page/` — thin lifecycle/composition route.
+- `presentation/facades/catalog-page.facade.ts` — Router/domain orchestration,
+  canonicalization, and live announcements.
+- `presentation/components/` — OnPush signal input/output visual regions.
+- `../../shared/presentation/directives/` — reusable focus, keyboard,
+  outside-click, and body-scroll-lock behaviour.
 - `presentation/pages/catalog-page/_catalog-tokens.scss` — catalog-owned
   semantic style tokens referencing shared primitives.
 - `src/styles/_storefront.scss` — catalog-host-scoped storefront rules. Every

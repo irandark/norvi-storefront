@@ -1,159 +1,35 @@
-<header class="site-header" [attr.inert]="navigationOpen() && mobileViewport() ? '' : null">
-  <div class="utility-strip"><span>Москва · Доставка сегодня</span></div>
-  <div class="site-header__top">
-    <a class="brand" href="/" aria-label="НОРВИ — главная"><span class="brand-mark" aria-hidden="true">✦</span><span>НОРВИ</span></a>
-    <div class="header-actions" aria-label="Будущие возможности">
-      <span class="search-placeholder">Найти товар или категорию</span>
-      <span class="cart-placeholder">Корзина</span>
-    </div>
-  </div>
-  <nav class="primary-navigation" aria-label="Основная навигация">
-    <button
-      #catalogTrigger
-      class="catalog-trigger"
-      type="button"
-      aria-label="Каталог товаров"
-      [attr.aria-expanded]="navigationOpen()"
-      aria-controls="catalog-navigation"
-      (click)="toggleNavigation()"
-    >
-      <span aria-hidden="true">☰</span> Каталог
-    </button>
-    <span>Новинки</span><span>Для дома</span><span>Поддержка</span>
-  </nav>
-</header>
+<app-catalog-header
+  [navigationOpen]="navigationOpen()"
+  [mobileViewport]="mobileViewport()"
+  (toggleRequested)="toggleNavigation($event)"
+/>
 
 @if (navigationOpen()) {
-  <button class="navigation-backdrop" type="button" aria-label="Закрыть каталог" (click)="closeNavigation()"></button>
-  <section
-    #catalogNavigation
-    id="catalog-navigation"
-    class="catalog-navigation"
-    aria-label="Каталог товаров"
-    [attr.role]="'dialog'"
-    [attr.aria-modal]="mobileViewport() ? 'true' : null"
-    (keydown)="onNavigationKeydown($event)"
-  >
-    <div class="catalog-navigation__header">
-      <div><p>Каталог товаров</p><h2>Выберите категорию</h2></div>
-      <button class="close-button" type="button" (click)="closeNavigation()" aria-label="Закрыть каталог"><span aria-hidden="true">Esc</span> Закрыть</button>
-    </div>
-    @if (catalog.groupsState().status === 'error') {
-      <div class="group-error" role="alert">
-        <h3 id="group-error-title" tabindex="-1">Категории временно недоступны</h3>
-        <p>Все товары по-прежнему доступны.</p>
-        <button type="button" aria-describedby="group-error-title" (click)="catalog.retryGroups()">Повторить</button>
-      </div>
-    }
-    <div class="group-list" role="listbox" aria-label="Группы товаров">
-      <button
-        type="button"
-        role="option"
-        [attr.aria-selected]="catalog.selection().kind === 'all'"
-        (keydown)="onOptionKeydown($event)"
-        (click)="selectAll()"
-      >
-        Все товары
-      </button>
-      @for (group of catalog.groups(); track group.id) {
-        <button
-          type="button"
-          role="option"
-          [attr.aria-selected]="isSelected(group)"
-          (keydown)="onOptionKeydown($event)"
-          (click)="selectGroup(group)"
-        >
-          {{ group.name }}
-        </button>
-      }
-    </div>
-    <div class="catalog-navigation__footer"><span>↑↓ выбор · Enter применить</span><button type="button" (click)="selectAll()">Все товары</button></div>
-  </section>
+  <app-catalog-navigation
+    [groupsState]="facade.groupsState()"
+    [groups]="facade.groups()"
+    [selection]="facade.selection()"
+    [mobileViewport]="mobileViewport()"
+    [trigger]="trigger()"
+    (closeRequested)="closeNavigation()"
+    (retry)="facade.retryGroups()"
+    (selectAll)="selectAll()"
+    (selectGroup)="facade.selectGroup($event); closeNavigation()"
+  />
 }
 
 <main class="storefront" [attr.inert]="navigationOpen() && mobileViewport() ? '' : null">
   <nav class="breadcrumbs" aria-label="Хлебные крошки"><span>Главная</span><span aria-hidden="true">/</span><span>Каталог</span></nav>
   <section class="catalog" aria-labelledby="catalog-title">
-    <header class="catalog__header">
-      <div class="catalog-title-block">
-        <p class="catalog__eyebrow">Подборка Норви</p>
-        @if (catalog.productsState().status === 'idle') {
-          <span class="heading-skeleton" aria-hidden="true"></span>
-        } @else {
-          <h1 id="catalog-title">{{ catalog.selection().name }}</h1>
-        }
-      </div>
-      <div>
-        @if (catalog.resultCount() !== null) {
-          <p class="result-count">{{ catalog.resultCount() }} товаров</p>
-        } @else {
-          <span class="count-skeleton" aria-hidden="true"></span>
-        }
-      </div>
-    </header>
-
-    <div
-      class="results"
-      [attr.aria-busy]="catalog.productsState().status === 'loading'"
-      aria-live="off"
-    >
-      @switch (catalog.productsState().status) {
-        @case ('idle') {
-          <div class="skeleton-grid" aria-hidden="true">
-            @for (item of [1, 2, 3, 4]; track item) { <div class="product-skeleton"></div> }
-          </div>
-        }
-        @case ('loading') {
-          <p class="loading-label">
-            {{ loadingLabel() }}
-          </p>
-          <div class="skeleton-grid" aria-hidden="true">
-            @for (item of [1, 2, 3, 4]; track item) { <div class="product-skeleton"></div> }
-          </div>
-        }
-        @case ('error') {
-          <div class="state-card state-card--error" role="alert">
-            <h2 id="products-error-title">Не удалось загрузить товары</h2>
-            <p>Попробуйте ещё раз — выбранная категория сохранена.</p>
-            <button type="button" aria-describedby="products-error-title" (click)="catalog.retryProducts()">Повторить загрузку</button>
-          </div>
-        }
-        @case ('empty') {
-          <div class="state-card" data-testid="catalog-empty">
-            @if (catalog.selection().kind === 'all') {
-              <h2>В магазине пока нет товаров</h2>
-              <p>Загляните позже — мы пополняем ассортимент.</p>
-            } @else {
-              <h2>В этой категории пока нет товаров</h2>
-              <p>Посмотрите полный ассортимент магазина.</p>
-              <button type="button" (click)="showAllProducts()">Показать все товары</button>
-            }
-          </div>
-        }
-        @case ('loaded') {
-          <div class="product-grid">
-            @for (product of catalog.products(); track product.id) {
-              <article class="product-card" data-testid="product-card">
-                <div class="product-card__image">
-                  <img [src]="product.imageUrl" [alt]="product.name" width="640" height="480" />
-                </div>
-                <div class="product-card__body">
-                  <h2>{{ product.name }}</h2>
-                  <p>{{ product.description }}</p>
-                  <strong>{{ formatPrice(product.priceInCents) }}</strong>
-                  @if (product.stock === 0) {
-                    <span class="stock stock--empty">Нет в наличии</span>
-                  } @else {
-                    <span class="stock">В наличии · {{ product.stock }} шт.</span>
-                  }
-                </div>
-              </article>
-            }
-          </div>
-        }
-      }
-    </div>
+    <app-catalog-results
+      [state]="facade.productsState()"
+      [selection]="facade.selection()"
+      [products]="facade.products()"
+      [resultCount]="facade.resultCount()"
+      (retry)="facade.retryProducts()"
+      (showAll)="facade.selectAll()"
+    />
   </section>
 </main>
 
-<p class="visually-hidden" role="status" aria-live="polite" aria-atomic="true">{{ liveAnnouncement() }}</p>
+<p class="visually-hidden" role="status" aria-live="polite" aria-atomic="true">{{ facade.liveAnnouncement() }}</p>

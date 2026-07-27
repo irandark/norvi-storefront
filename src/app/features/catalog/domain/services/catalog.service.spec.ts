@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
-import type { Product } from '../models/product';
+import { ProductRepository, type Product } from '../../../products/domain';
 import type { ProductGroup } from '../models/product-group';
-import { ProductCatalogRepository } from '../ports/product-catalog.repository';
+import { ProductGroupRepository } from '../ports/product-group.repository';
 import { CatalogService } from './catalog.service';
 
 const group: ProductGroup = { id: 'kitchen id', slug: 'kuhnya', name: 'Кухня' };
@@ -14,12 +14,14 @@ const product: Product = {
 function setup() {
   const groupResponses: Subject<readonly ProductGroup[]>[] = [];
   const productResponses: Subject<readonly Product[]>[] = [];
-  const repository = {
+  const groupRepository = {
     getGroups: vi.fn(() => {
       const response = new Subject<readonly ProductGroup[]>();
       groupResponses.push(response);
       return response;
     }),
+  };
+  const productRepository = {
     getProducts: vi.fn(() => {
       const response = new Subject<readonly Product[]>();
       productResponses.push(response);
@@ -27,19 +29,45 @@ function setup() {
     }),
   };
   TestBed.configureTestingModule({
-    providers: [CatalogService, { provide: ProductCatalogRepository, useValue: repository }],
+    providers: [
+      CatalogService,
+      { provide: ProductGroupRepository, useValue: groupRepository },
+      { provide: ProductRepository, useValue: productRepository },
+    ],
   });
-  return { service: TestBed.inject(CatalogService), repository, groupResponses, productResponses };
+  return {
+    service: TestBed.inject(CatalogService),
+    groupRepository,
+    productRepository,
+    groupResponses,
+    productResponses,
+  };
 }
 
 describe('CatalogService', () => {
+  it('is inert until explicitly activated and activates only once', () => {
+    const { service, groupRepository, productRepository, groupResponses } = setup();
+
+    expect(service.groupsState()).toEqual({ status: 'idle' });
+    expect(groupRepository.getGroups).not.toHaveBeenCalled();
+    expect(productRepository.getProducts).not.toHaveBeenCalled();
+
+    service.activate();
+    service.activate();
+
+    expect(service.groupsState()).toEqual({ status: 'loading' });
+    expect(groupRepository.getGroups).toHaveBeenCalledOnce();
+    expect(groupResponses).toHaveLength(1);
+  });
+
   it('loads groups, resolves a URL group and exposes products and count', () => {
-    const { service, repository, groupResponses, productResponses } = setup();
+    const { service, productRepository, groupResponses, productResponses } = setup();
     service.activateUrlSelection('kuhnya');
+    service.activate();
     groupResponses[0].next([group]);
     expect(service.groups()).toEqual([group]);
     expect(service.selection()).toEqual({ kind: 'group', group, name: 'Кухня' });
-    expect(repository.getProducts).toHaveBeenCalledWith('kitchen id');
+    expect(productRepository.getProducts).toHaveBeenCalledWith('kitchen id');
     expect(service.productsState()).toEqual({ status: 'loading', mode: 'initial' });
     expect(service.resultCount()).toBeNull();
     productResponses[0].next([product]);
@@ -48,10 +76,11 @@ describe('CatalogService', () => {
   });
 
   it('loads all products for no query and represents an empty response', () => {
-    const { service, repository, groupResponses, productResponses } = setup();
+    const { service, productRepository, groupResponses, productResponses } = setup();
     service.activateUrlSelection(null);
+    service.activate();
     groupResponses[0].next([]);
-    expect(repository.getProducts).toHaveBeenCalledWith(undefined);
+    expect(productRepository.getProducts).toHaveBeenCalledWith(undefined);
     productResponses[0].next([]);
     expect(service.productsState()).toEqual({ status: 'empty' });
     expect(service.products()).toEqual([]);
@@ -61,6 +90,7 @@ describe('CatalogService', () => {
   it('canonicalizes unknown slugs and emits a recovery announcement', () => {
     const { service, groupResponses } = setup();
     service.activateUrlSelection('gone');
+    service.activate();
     groupResponses[0].next([group]);
     expect(service.selection().kind).toBe('all');
     expect(service.canonicalization()).toMatchObject({
@@ -69,13 +99,14 @@ describe('CatalogService', () => {
   });
 
   it('keeps all-products usable when groups fail and retries groups independently', () => {
-    const { service, repository, groupResponses, productResponses } = setup();
+    const { service, productRepository, groupResponses, productResponses } = setup();
     service.activateUrlSelection('kuhnya');
+    service.activate();
     groupResponses[0].error(new Error('offline'));
     expect(service.groupsState()).toEqual({ status: 'error' });
     expect(service.groups()).toEqual([]);
     service.activateUrlSelection(null);
-    expect(repository.getProducts).toHaveBeenCalledWith(undefined);
+    expect(productRepository.getProducts).toHaveBeenCalledWith(undefined);
     productResponses[1].error(new Error('offline'));
     expect(service.productsState()).toEqual({ status: 'error' });
     service.retryProducts();
@@ -90,6 +121,7 @@ describe('CatalogService', () => {
 
   it('makes the latest product request authoritative', () => {
     const { service, groupResponses, productResponses } = setup();
+    service.activate();
     groupResponses[0].next([group]);
     service.activateUrlSelection(null);
     service.activateUrlSelection('kuhnya');
@@ -101,10 +133,11 @@ describe('CatalogService', () => {
   });
 
   it('waits for URL activation when groups resolve first and suppresses a stale error', () => {
-    const { service, repository, groupResponses, productResponses } = setup();
+    const { service, productRepository, groupResponses, productResponses } = setup();
+    service.activate();
     groupResponses[0].next([group]);
     expect(service.productsState()).toEqual({ status: 'idle' });
-    expect(repository.getProducts).not.toHaveBeenCalled();
+    expect(productRepository.getProducts).not.toHaveBeenCalled();
 
     service.activateUrlSelection(null);
     service.activateUrlSelection('kuhnya');
@@ -115,10 +148,11 @@ describe('CatalogService', () => {
   });
 
   it('waits for URL activation when the group request fails first', () => {
-    const { service, repository, groupResponses } = setup();
+    const { service, productRepository, groupResponses } = setup();
+    service.activate();
     groupResponses[0].error(new Error('offline'));
-    expect(repository.getProducts).not.toHaveBeenCalled();
+    expect(productRepository.getProducts).not.toHaveBeenCalled();
     service.activateUrlSelection(null);
-    expect(repository.getProducts).toHaveBeenCalledWith(undefined);
+    expect(productRepository.getProducts).toHaveBeenCalledWith(undefined);
   });
 });
