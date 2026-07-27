@@ -32,6 +32,33 @@ The task must identify:
 Non-visual refactors, test-only changes, and data-access changes may mark the
 design gate `Not applicable` with a short reason.
 
+## Architect discovery gate
+
+After analyst completion and before orchestrator implementation readiness,
+every material feature, technical-debt item, architecture proposal, or other
+materially scoped task records:
+
+- architect feedback on assumptions, constraints, risks, dependencies, and
+  alternatives;
+- targeted decision questions with options, trade-offs, and a recommendation
+  where useful;
+- the explicit human decision, rejected options, and unresolved assumptions;
+- a discovery verdict of `Complete` or `Blocked`.
+
+An unresolved material question blocks implementation and the task status must
+be `Blocked`. If the proposal is fully determined, record why no material choice
+remains and the human's confirmation. Do not invent questions.
+
+Urgent defect containment may proceed only as the smallest reversible action
+when delay would cause material harm. Record the urgency, deferred questions,
+containment or rollback limits, and a retrospective human decision immediately
+afterward.
+
+Architect implementation constraints and final diff review remain conditional
+on affected boundaries, contracts, dependencies, ownership, security, or
+cross-layer behaviour. For UI changes, architect discovery is additional to,
+not a replacement for, the separate design approval gate.
+
 Completed specifications remain here as versioned product history.
 
 ## GitHub delivery contract
@@ -48,7 +75,9 @@ Material delivery tasks record:
 
 - analyst verdict;
 - design verdict or `Not applicable`;
-- architect verdict;
+- architect discovery feedback and verdict;
+- recorded human decisions, rejected options, and unresolved assumptions;
+- architect implementation/final-review verdict or `Not applicable`;
 - developer evidence;
 - tester verdict;
 - reviewer verdict;

@@ -7,11 +7,24 @@ the delivery loop until the complete outcome is achieved.
 
 ## Entry gate
 
-Accept work only after analyst verdict `Complete` and, when UI design applies,
-recorded human design approval.
+Accept material work only after analyst verdict `Complete`, architect discovery
+verdict `Complete`, every material architect question and human decision is
+recorded in the task specification, and, when UI design applies, explicit human
+design approval is recorded. A material unresolved question blocks
+implementation; mark the task `Blocked` and preserve the question.
 
-For executable Angular work, do not activate implementation until the architect
-records:
+When architect discovery finds the proposal fully determined, require its
+reasoning and the human's confirmation instead of inventing an additional
+decision.
+
+The only exception is an urgent defect where waiting would cause material harm.
+Before activating work, limit it to the smallest reversible containment and
+record the urgency, containment limits and rollback, and deferred decision
+questions. Activate no broader implementation and require the retrospective
+human decision immediately after containment.
+
+For executable Angular work where architecture applies, do not activate
+implementation until the architect records:
 
 - an explicit constructor/initialization verdict;
 - the page responsibility and decomposition map;
@@ -32,15 +45,17 @@ records:
 
 ## Agent lifecycle
 
-| Stage          | Activate              | Release when                                          |
-| -------------- | --------------------- | ----------------------------------------------------- |
-| Intake         | Analyst               | Analysis gate passes or human input is required       |
-| Design         | Designer              | Human approves, requests another iteration, or blocks |
-| Architecture   | Architect             | Constraints or final verdict are recorded             |
-| Implementation | Developer             | Change and focused checks are complete                |
-| Verification   | Tester                | Evidence and verdict are recorded                     |
-| Review         | Reviewer              | Findings and verdict are recorded                     |
-| Closure        | Documentation steward | Sources of truth are current                          |
+| Stage                     | Activate                  | Release when                                          |
+| ------------------------- | ------------------------- | ----------------------------------------------------- |
+| Intake                    | Analyst                   | Analysis gate passes or human input is required       |
+| Discovery                 | Architect                 | Decisions are recorded or a blocker is recorded       |
+| Design                    | Designer                  | Human approves, requests another iteration, or blocks |
+| Architecture constraints  | Architect, if applicable | Pre-implementation constraints are recorded           |
+| Implementation            | Developer                 | Change and focused checks are complete                |
+| Verification              | Tester                    | Evidence and verdict are recorded                     |
+| Review                    | Reviewer                  | Findings and verdict are recorded                     |
+| Architecture final review | Architect, if applicable | Final-diff verdict is recorded                         |
+| Closure                   | Documentation steward     | Sources of truth are current                          |
 
 Reactivate the responsible role after a finding. Stop or replace work that is
 complete, duplicated, stale, blocked, or outside its authority. Never leave an
@@ -48,14 +63,16 @@ agent running without a bounded responsibility.
 
 ## Exemptions
 
-Analyst and orchestrator are mandatory for material work. Designer applies only
-to new or materially changed UI. Developer applies to executable changes.
-Architect applies to boundaries, contracts, dependencies, ownership, security,
-or cross-layer behaviour. Tester and reviewer apply to behavioural/executable
+Analyst, architect discovery, and orchestrator are mandatory for material work.
+Designer applies only to new or materially changed UI. Developer applies to
+executable changes. Architect implementation constraints and final diff review
+apply only to boundaries, contracts, dependencies, ownership, security, or
+cross-layer behaviour. Tester and reviewer apply to behavioural/executable
 changes. Documentation steward applies when sources of truth change.
 
-Only meaning-preserving typo/link fixes may routinely skip developer, architect,
-tester, and reviewer. Record every skipped role as
+Only meaning-preserving typo/link fixes may routinely skip developer, architect
+discovery, architect delivery review, tester, and reviewer. Record every
+skipped role or architect phase as
 `Not applicable — <rationale>`. Missing evidence is not an exemption. Skipping
 an otherwise mandatory role requires explicit human approval.
 
@@ -70,9 +87,10 @@ remains. The task's dedicated pull request must also have passed mandatory CI
 and been merged. Otherwise continue the loop or report a genuine `Blocked`
 state.
 
-For Angular executable changes, missing constructor, decomposition, facade, or
-capability-placement evidence blocks the exit gate even when tests and coverage
-pass.
+For Angular executable changes where architecture applies, missing constructor,
+decomposition, facade, or capability-placement evidence blocks the exit gate
+even when tests and coverage pass. Universal discovery evidence and conditional
+architecture-delivery evidence must remain distinct.
 
 ## Human authority
 
@@ -82,6 +100,8 @@ specialist's verdict, hide findings, or expand scope without authority.
 ## Required output
 
 - Activation plan, exemptions, current stage, and active roles.
+- Architect discovery feedback, decisions, rejected options, unresolved
+  assumptions, human confirmations, and discovery verdict.
 - Loop iterations and reason for repetition.
 - Verdicts, finding disposition, approvals, gate evidence, and open risks.
 - Constructor/initialization, responsibility-map, facade, and

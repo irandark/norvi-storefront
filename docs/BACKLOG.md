@@ -35,7 +35,7 @@ Backlog → Ready → In progress → In review → Done
 | SHOP-004   | Story     | Add products to the cart                                                  | P2       | Backlog | SHOP-003                 | To create                                           |
 | SHOP-005   | Story     | Change quantities, remove lines, and restore the cart                     | P2       | Backlog | SHOP-004                 | To create                                           |
 | SHOP-006   | Story     | Submit checkout exactly once                                              | P2       | Backlog | SHOP-005                 | To create                                           |
-| HARNESS-004 | Task     | Make architect-led discovery and human decision-making mandatory          | P1       | Backlog | HARNESS-001              | `docs/tasks/HARNESS-004-architect-partnership.md`   |
+| HARNESS-004 | Task     | Make architect-led discovery and human decision-making mandatory          | P1       | In review | HARNESS-001             | `docs/tasks/HARNESS-004-architect-partnership.md`   |
 
 ## Completed
 
@@ -51,7 +51,8 @@ Backlog → Ready → In progress → In review → Done
 
 1. New work receives a key and backlog row before implementation begins.
 2. `Ready` means acceptance criteria, dependencies, exclusions, verification,
-   and any required design approval are present.
+   completed architect discovery evidence, all material human decisions
+   resolved and recorded, and any required design approval are present.
 3. Only one status is recorded for a task.
 4. An agent updates the row when work starts, becomes blocked, enters review, or
    completes.
