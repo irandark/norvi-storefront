@@ -35,7 +35,6 @@ Backlog → Ready → In progress → In review → Done
 | SHOP-004   | Story     | Add products to the cart                                                  | P2       | Backlog | SHOP-003                 | To create                                           |
 | SHOP-005   | Story     | Change quantities, remove lines, and restore the cart                     | P2       | Backlog | SHOP-004                 | To create                                           |
 | SHOP-006   | Story     | Submit checkout exactly once                                              | P2       | Backlog | SHOP-005                 | To create                                           |
-| HARNESS-004 | Task     | Make architect-led discovery and human decision-making mandatory          | P1       | In review | HARNESS-001             | `docs/tasks/HARNESS-004-architect-partnership.md`   |
 
 ## Completed
 
@@ -46,6 +45,7 @@ Backlog → Ready → In progress → In review → Done
 | SHOP-002    | Design    | Storefront layout and product-group navigation | Done       | `docs/tasks/002-storefront-layout-and-product-groups-design.md` |
 | TD-001      | Tech debt | Introduce the catalog domain boundary          | Done       | `docs/tasks/TD-001-catalog-domain-boundary.md`                  |
 | TD-002      | Tech debt | Approve the original catalog design            | Superseded | `docs/tasks/TD-002-catalog-design-approval.md`                  |
+| HARNESS-004 | Task      | Make architect-led discovery and human decision-making mandatory | Done | `docs/tasks/HARNESS-004-architect-partnership.md` |
 
 ## Working rules
 
@@ -74,3 +74,7 @@ Backlog → Ready → In progress → In review → Done
     board, task specification, quality evidence, branch/PR state, and actual
     delivery stage. Stale status is a process defect and is corrected before
     further work.
+12. When a task is finally completed, change its backlog row, detailed
+    specification, and quality evidence to `Done` immediately and verify the
+    final state before sending the human completion report. A merge is not a
+    reason to leave an intermediate status for a later cleanup.

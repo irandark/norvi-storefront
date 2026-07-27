@@ -43,6 +43,10 @@ development. Deliver product changes as narrow, testable vertical slices.
   it enters `Ready`, `In progress`, `In review`, `Blocked`, or `Done`.
 - Record the status transition in the same commit or pull request change that
   establishes it. Do not postpone status cleanup until handoff or closure.
+- When a task is finally completed, update its backlog row, detailed
+  specification, and quality evidence to `Done` immediately. The final human
+  report must not be sent while those sources still show an intermediate
+  status.
 - Before every handoff and before reporting progress to the human, verify that
   backlog, task specification, quality evidence, branch/PR state, and actual
   work stage agree.
