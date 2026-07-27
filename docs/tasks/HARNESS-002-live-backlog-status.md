@@ -28,6 +28,13 @@ only.
    of backlog, task spec, quality evidence, branch/PR state, and actual stage.
 6. Stale status is explicitly classified as a process defect that must be
    corrected before further work.
+7. When a task is finally completed, the backlog row, detailed task
+   specification, and quality evidence are changed to `Done` immediately,
+   before the final completion report is sent to the human.
+8. A merge does not complete the reporting workflow while any source of truth
+   still shows `Ready`, `In progress`, `In review`, or `Blocked`; the agent
+   responsible for final completion must perform and verify the final status
+   transition.
 
 ## Scope
 
@@ -52,3 +59,5 @@ only.
 - Documentation review finds no conflicting status guidance.
 - Mandatory CI passes.
 - The dedicated pull request is merged.
+- The final `Done` status is synchronized across the backlog, detailed task
+  specification, and quality evidence before completion is reported.

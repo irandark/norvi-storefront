@@ -2,7 +2,7 @@
 
 ## Status
 
-In review.
+Done on protected merge of PR #11.
 
 ## Priority
 
