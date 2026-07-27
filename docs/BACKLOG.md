@@ -28,6 +28,7 @@ Backlog → Ready → In progress → In review → Done
 | TD-004     | Tech debt | Enforce architecture boundaries with a tested static import guard          | P2       | Done    | TD-001                   | `docs/tasks/TD-004-architecture-import-guard.md`    |
 | HARNESS-002 | Task     | Keep backlog and task statuses continuously synchronized                   | P2       | Done    | HARNESS-001                | `docs/tasks/HARNESS-002-live-backlog-status.md`     |
 | HARNESS-003 | Task     | Enforce Angular composition and reusable capability boundaries             | P1       | Done    | HARNESS-001, TD-004      | `docs/tasks/HARNESS-003-angular-composition-and-capability-rules.md` |
+| TD-005     | Tech debt | Refactor the project to comply with Angular composition and capability rules | P1    | Backlog | SHOP-003, HARNESS-003, TD-004 | `docs/tasks/TD-005-project-wide-angular-architecture-refactor.md` |
 | SHOP-003   | Story     | Implement the approved storefront layout and backend-owned product groups | P1       | Done    | SHOP-002, TD-001, TD-003, DESIGN-003 | `docs/tasks/SHOP-003-approved-storefront-and-product-groups.md` |
 | DESIGN-003 | Design    | Design loading, error, empty, focus, selected, and refetch states         | P1       | Done    | SHOP-002                 | `docs/tasks/DESIGN-003-storefront-states-and-interactions.md` |
 | DEVOPS-001 | DevOps    | Publish the frontend to GitHub and add Actions quality gates              | P2       | Done    | HARNESS-001              | `docs/tasks/DEVOPS-001-github-repository-and-ci.md` |
